@@ -135,19 +135,20 @@ CREATE TABLE kanjiEnglishLink(
 	  	  kanjiSystem(ks_kanjiID)
 );
 
-
 --should we_easeiEigo be nvarchar(20)? 
+-- Wasei Eigo is just a link to a Japanese word
+-- also a sequence of Kana, by extension
 CREATE TABLE waseiEigo(
-        we_waseiEigoID INTEGER
-        , we_japaneseWordID INTEGER
-        , we_waseiEigo nvarchar(20) NOT NULL
+        we_waseiEigoID INTEGER AUTOINCREMENT
+        , we_japaneseWordID INTEGER NOT NULL
+	, FOREIGN KEY(we_japaneseWordID) REFERENCES
+	  	  japaneseWord(jw_wordID)
 );
 --englishWaseiEigoPhoneticLink(ewep_englishWordID, ewep_waseiEigoID)
 -- use a function to find phonetic links; don't store them
 
-CREATE TABLE englishWaseiEigoEqualityLink(
-
-        ewep_englishWordID INTEGER
-        , ewep_waseiEigoID INTEGER
-);
+--CREATE TABLE englishWaseiEigoEqualityLink(
+--       ewep_englishWordID INTEGER
+--       , ewep_waseiEigoID INTEGER
+--);
 
