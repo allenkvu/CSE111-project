@@ -2,32 +2,57 @@ CREATE TABLE englishWord(
        ew_wordid INTEGER PRIMARY KEY AUTOINCREMENT
        , ew_word VARCHAR(20)
 );
-englishWordOpposite(
+
+CREATE TABLE englishWordOpposite(
 	ewo_englishWordID INTEGER
 	, ewo_englishOppositeID INTEGER
 	, FOREIGN KEY(ewo_englishWordID) REFERENCES englishWord(ew_wordid)
 	, FOREIGN KEY(ewo_englishOppositeID) REFERENCES englishWord(ew_wordid)
 );
 
-englishPhraseIndex(
+CREATE TABLE englishPhraseIndex(
 	epi_ID INTEGER PRIMARY KEY AUTOINCREMENT
 );
-englishPhrase(   -- English Phrase is now a weak entity set
+
+CREATE TABLE englishPhrase(   -- English Phrase is now a weak entity set
 	ep_ID INTEGER
 	, ep_englishwordID INTEGER NOT NULL
 	, ep_order INTEGER DEFAULT 0
-	, FOREIGN KEY(ep_id) REFERENCES englishPhraseIndex(epi_id)
+	, FOREIGN KEY(ep_ID) REFERENCES englishPhraseIndex(epi_ID)
 );
 
-japaneseWord(jw_WordID)
-japaneseWordPredecessor(jwp_japaneseWordID, jpp_predecessorID)
-japaneseWordOpposite(jwo_japaneseWordID, jpo_oppositeID)
-japaneseWordDescription(jwd_japaneseWordID, jwd_englishPhraseID)
+--not very sure if right
+--start
+CREATE TABLE japaneseWord(
+        jw_WordID INTEGER PRIMARY KEY AUTOINCREMENT
+);
 
-japaneseEnglishWordLinkIndex(
+CREATE TABLE japaneseWordPredecessor(
+        jwp_japaneseWordID INTEGER
+        , jpp_predecessorID INTEGER
+
+);
+
+
+CREATE TABLE japaneseWordOpposite(
+    	jwo_japaneseWordID INTEGER
+    	, jpo_oppositeID INTEGER
+	, FOREIGN KEY(jwo_japaneseWordID) REFERENCES japaneseWord(jw_WordID)
+	, FOREIGN KEY(jpo_oppositeID) REFERENCES japaneseWord(jw_WordID)
+);
+
+CREATE TABLE japaneseWordDescription(
+    	jwd_japaneseWordID INTEGER
+        , jwd_englishPhraseID INTEGER
+);
+
+--end
+
+CREATE TABLE japaneseEnglishWordLinkIndex(
 	jewli_linkID INTEGER PRIMARY KEY AUTOINCREMENT
 );
-japaneseEnglishWordLink(
+
+CREATE TABLE japaneseEnglishWordLink(
 	jewl_linkID INTEGER NOT NULL -- not really a key
 	, jewl_japaneseWordID INTEGER NOT NULL
 	, jewl_englishWordID INTEGER NOT NULL
@@ -41,7 +66,7 @@ japaneseEnglishWordLink(
 	  	  englishWord(ew_wordID)
 );
 
-japaneseWordKanaLink(
+CREATE TABLE japaneseWordKanaLink(
 	jwkn_japaneseWordID INTEGER NOT NULL
 	, jwkn_kanaID INTEGER NOT NULL
 	, jwkn_kanaOrder DEFAULT 0
@@ -54,68 +79,75 @@ japaneseWordKanaLink(
 -- Japanese word; ordering of multiple Japanese words that
 -- share a Kana character is unimportant.
 
-japaneseWordKangiLink(
+CREATE TABLE japaneseWordKanjiLink(
 	jwki_japaneseWordID INTEGER NOT NULL
-	, jwki_kangiID INTEGER NOT NULL
+	, jwki_kanjiID INTEGER NOT NULL
 	, jwki_order INTEGER DEFAULT 0
 	, FOREIGN KEY(jwki_japaneseWordID) REFERENCES
 		japaneseWord(jw_wordID)
-	, FOREIGN KEY(jwki_kangiID) REFERENCES
-	  	kangiSystem(ks_kangiID)
+	, FOREIGN KEY(jwki_kanjiID) REFERENCES
+	  	kanjiSystem(ks_kanjiID)
 );
 
-kanaSystem(
+CREATE TABLE kanaSystem(
 	kns_kanaID INTEGER PRIMARY KEY AUTOINCREMENT
 	, kns_hiragana nvarchar(20)
 	, kns_katakana nvarchar(20)
 	, kns_romaji varchar(5)
 );
 
-waseiEigoKanaLinkIndex(
+CREATE TABLE waseiEigoKanaLinkIndex(
 	wekli_linkID INTEGER PRIMARY KEY AUTOINCREMENT
 );
 
-waseiEigoKanaLink(
+CREATE TABLE waseiEigoKanaLink(
 	wekl_linkID INTEGER NOT NULL
 	, wekl_waseiEigoId INTEGER NOT NULL
 	, wekl_kanaID INTEGER NOT NULL
 	, wekl_kanaOrder INTEGER DEFAULT 0
 	, FOREIGN KEY(wekl_linkID) REFERENCES
-	  	  waseiEigoKanaLinkIndex(wekli_linkid)
+	  	  waseiEigoKanaLinkIndex(wekli_linkID)
 	, FOREIGN KEY(wekl_waseiEigoId) REFERENCES
 	  	  waseiEigo(we_waseiEigoID)
 	, FOREIGN KEY(wekl_kanaID) REFERENCES
-	  	  kanaSystem(kns_id)
+	  	  kanaSystem(kns_kanaID)
 );
 
-kangiSystem(
-	ks_kangiID INTEGER PRIMARY KEY AUTOINCREMENT
+CREATE TABLE kanjiSystem(
+	ks_kanjiID INTEGER PRIMARY KEY AUTOINCREMENT
 	, ks_char nvarchar(20) NOT NULL
 );
 
 -- link index only necessary when bidirectional ordering matters;
--- kangi-English is a many to many relationship,
+-- kanji-English is a many to many relationship,
 -- but we only care about 
---kangiEnglishLinkIndex(
+--kanjiEnglishLinkIndex(
 --	keli_index INTEGER PRIMARY KEY AUTOINCREMENT
 --);
-kangiEnglishLink(
+CREATE TABLE kanjiEnglishLink(
 --	kel_index INTEGER NOT NULL
-	kel_kangiID INTEGER NOT NULL
+	kel_kanjiID INTEGER NOT NULL
 	, kel_englishWordID INTEGER NOT NULL
 	, kel_englishWordOrder INTEGER DEFAULT 0
 	, FOREIGN KEY(kel_englishWordID) REFERENCES
 	  	  englishWord(ew_wordID)
-	, FOREIGN KEY(kel_kangiID) REFERENCES
-	  	  kangiSystem(ks_kangiID)
+	, FOREIGN KEY(kel_kanjiID) REFERENCES
+	  	  kanjiSystem(ks_kanjiID)
 );
 
-waseiEigo(we_waseiEigoID
-, we_japaneseWordID
-, we_waseiEigo
-)
+
+--should we_easeiEigo be nvarchar(20)? 
+CREATE TABLE waseiEigo(
+        we_waseiEigoID INTEGER
+        , we_japaneseWordID INTEGER
+        , we_waseiEigo nvarchar(20) NOT NULL
+);
 --englishWaseiEigoPhoneticLink(ewep_englishWordID, ewep_waseiEigoID)
 -- use a function to find phonetic links; don't store them
 
-englishWaseiEigoEqualityLink(ewep_englishWordID, ewep_waseiEigoID)
+CREATE TABLE englishWaseiEigoEqualityLink(
+
+        ewep_englishWordID INTEGER
+        , ewep_waseiEigoID INTEGER
+);
 
