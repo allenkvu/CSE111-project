@@ -1,0 +1,8 @@
+# prompts
+
+def mainMenu = "
+  1) Database Setup
+  2) Translation
+  3) Exit
+  Enter choice:
+"
