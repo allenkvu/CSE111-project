@@ -4,6 +4,27 @@
 
 foo = 'bar'
 
+
+
+# insertEnglishWord
+# insertKanaWord
+# insertKangiWord
+# insertJapaneseWordKanaLink
+# insertJapaneseWordKangiLink
+
+# insertJapaneseEnglishLinkIndex
+# getJapaneseEnglishLinkIndex
+# insertJapaneseWordEnglishLink
+
+# insertEnglishPhraseIndex
+# getEnglishPhraseIndex
+# insertEnglishPhrase
+
+# getKanaFromEnglishWord
+# getKanaFromEnglishPhrase
+# getEnglishFromJapaneseWord
+# getEnglishFromJapaneseSequence
+
 #############################
 # Single Word Insertions
 # (excluding Japanese word weak entity set)
@@ -53,12 +74,26 @@ insertJapaneseWordKanaLink = "insert into japaneseWordKangiLink (
  ?, ?, ?
 );"
 
+# Link together a Japanese word and a sequence of Kangi characters
+
+# If word link between Japanese word and Kangi sequence does not
+# already exist
+insertJapaneseWordKangiLink = "insert into japaneseWordKanaLink (
+  jwki_japaneseWordID
+ ,jwki_kangiID
+ ,jwki_order
+) values (
+  ?, ?, ?
+)"
+
 
 # Link together a sequence of English words and a sequence
 # of Japanese words.
 # If Japanese-English word link does not already exist
 # AND Japanese word(s) exists
 # AND English word(s) exists
+
+# complexity will be in the Python that generates jWordOrder, eWordOrder
 insertJapaneseEnglishLinkIndex = "insert into japaneseEnglishWordLinkIndex (
   jewli_linkID
 ) values (
@@ -68,13 +103,32 @@ getJapaneseEnglishLinkIndex = "select max(jewli_linkID)
   from japaneseEnglishWordLinkIndex;"
 
 insertJapaneseWordEnglishLink = "insert into japaneseEnglishWordLink (
-  jewl_linkID
+  jewl_linkID --determined by previous SQL query
  ,jewl_japaneseWordID
  ,jewl_englishWordID
  ,jewl_japaneseWordOrder
  ,jewl_englishWordOrder
 ) values (
   NULL, ?, ?, ?, ?
+);"
+
+# Create an English phrase from sequence of English words
+# if phrase does not already exist
+
+insertEnglishPhraseIndex = "insert englishPhraseIndex (
+  epi_ID
+) values (
+  NULL
+);"
+getEnglishPhraseIndex = "select max(epi_ID)
+  from englishPhraseIndex;"
+
+insertEnglishPhrase = "insert into englishPhrase (
+  ep_id
+ ,ep_englishWordID
+ ,ep_order
+) values (
+  ?, ?, ?
 );"
 
 
@@ -88,7 +142,6 @@ getKanaFromEnglishWord = "
 "
 
 # English sequence to Kana sequence
-# Peter will do this
 getKanaFromEnglishPhrase = "
 
 "

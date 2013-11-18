@@ -29,8 +29,8 @@ CREATE TABLE japaneseWord(
 );
 
 CREATE TABLE japaneseWordPredecessor(
-        jwp_japaneseWordID INTEGER
-        , jwp_predecessorID INTEGER
+        jwp_japaneseWordID INTEGER NOT NULL
+        , jwp_predecessorID INTEGER NOT NULL
 	, FOREIGN KEY(jwp_japaneseWordID) REFERENCES japaneseWord(jw_WordID)
 	, FOREIGN KEY(jwp_predecessorID) REFERENCES japaneseWord(jw_WordID)
 
@@ -38,15 +38,15 @@ CREATE TABLE japaneseWordPredecessor(
 
 
 CREATE TABLE japaneseWordOpposite(
-    	jwo_japaneseWordID INTEGER
-    	, jwo_oppositeID INTEGER
+    	jwo_japaneseWordID INTEGER NOT NULL
+    	, jwo_oppositeID INTEGER NOT NULL
 	, FOREIGN KEY(jwo_japaneseWordID) REFERENCES japaneseWord(jw_WordID)
 	, FOREIGN KEY(jwo_oppositeID) REFERENCES japaneseWord(jw_WordID)
 );
 
 CREATE TABLE japaneseWordDescription(
-    	jwd_japaneseWordID INTEGER
-        , jwd_englishPhraseID INTEGER
+    	jwd_japaneseWordID INTEGER NOT NULL
+        , jwd_englishPhraseID INTEGER NOT NULL
 	, FOREIGN KEY(jwd_japaneseWordID) REFERENCES japaneseWord(jw_wordID)
 	, FOREIGN KEY(jwd_englishPhraseID) REFERENCES englishPhrase(ep_ID)
 );
@@ -101,22 +101,6 @@ CREATE TABLE kanaSystem(
 	, kns_romaji varchar(5) UNIQUE
 );
 
-CREATE TABLE waseiEigoKanaLinkIndex(
-	wekli_linkID INTEGER PRIMARY KEY
-);
-
-CREATE TABLE waseiEigoKanaLink(
-	wekl_linkID INTEGER NOT NULL
-	, wekl_waseiEigoId INTEGER NOT NULL
-	, wekl_kanaID INTEGER NOT NULL
-	, wekl_kanaOrder INTEGER DEFAULT 0
-	, FOREIGN KEY(wekl_linkID) REFERENCES
-	  	  waseiEigoKanaLinkIndex(wekli_linkID)
-	, FOREIGN KEY(wekl_waseiEigoId) REFERENCES
-	  	  waseiEigo(we_waseiEigoID)
-	, FOREIGN KEY(wekl_kanaID) REFERENCES
-	  	  kanaSystem(kns_kanaID)
-);
 
 CREATE TABLE kanjiSystem(
 	ks_kanjiID INTEGER PRIMARY KEY
@@ -144,7 +128,7 @@ CREATE TABLE kanjiEnglishLink(
 -- Wasei Eigo is just a link to a Japanese word
 -- also a sequence of Kana, by extension
 CREATE TABLE waseiEigo(
-        we_waseiEigoID INTEGER
+        we_waseiEigoID INTEGER PRIMARY KEY
         , we_japaneseWordID INTEGER NOT NULL
 	, FOREIGN KEY(we_japaneseWordID) REFERENCES
 	  	  japaneseWord(jw_wordID)
