@@ -1,6 +1,6 @@
 Create TABLE englishWord(
        ew_wordid INTEGER PRIMARY KEY -- auto increment if NULL inserted
-       , ew_word VARCHAR(20)
+       , ew_word VARCHAR(20) UNIQUE
 );
 
 CREATE TABLE englishWordOpposite(
@@ -47,6 +47,8 @@ CREATE TABLE japaneseWordOpposite(
 CREATE TABLE japaneseWordDescription(
     	jwd_japaneseWordID INTEGER
         , jwd_englishPhraseID INTEGER
+	, FOREIGN KEY(jwd_japaneseWordID) REFERENCES japaneseWord(jw_wordID)
+	, FOREIGN KEY(jwd_englishPhraseID) REFERENCES englishPhrase(ep_ID)
 );
 
 --end
@@ -94,9 +96,9 @@ CREATE TABLE japaneseWordKanjiLink(
 
 CREATE TABLE kanaSystem(
 	kns_kanaID INTEGER PRIMARY KEY
-	, kns_hiragana nvarchar(20)
-	, kns_katakana nvarchar(20)
-	, kns_romaji varchar(5)
+	, kns_hiragana nvarchar(20) UNIQUE
+	, kns_katakana nvarchar(20) UNIQUE
+	, kns_romaji varchar(5) UNIQUE
 );
 
 CREATE TABLE waseiEigoKanaLinkIndex(
@@ -118,7 +120,7 @@ CREATE TABLE waseiEigoKanaLink(
 
 CREATE TABLE kanjiSystem(
 	ks_kanjiID INTEGER PRIMARY KEY
-	, ks_char nvarchar(20) NOT NULL
+	, ks_char nvarchar(20) NOT NULL UNIQUE
 );
 
 -- link index only necessary when bidirectional ordering matters;
