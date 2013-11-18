@@ -32,29 +32,29 @@ foo = 'bar'
 
 # English word insertion
 
-insertEnglishWord = "insert into englishWord (
-  ew_wordID
- ,ew_word
-) values (
-  NULL, ?
+insertEnglishWord = "insert into englishWord (\
+  ew_wordID\
+ ,ew_word\
+) values (\
+  NULL, %s\
 );"
 
 # Hiragana, Katakana, Romaji insertion (together)
-insertKanaWord = "insert into kanaSystem (
-  kns_kanaID
- ,kns_hiragana
- ,kns_katakana
- ,kns_romaji
-) values (
- NULL, ?, ?, ?
+insertKanaWord = "insert into kanaSystem (\
+  kns_kanaID\
+ ,kns_hiragana\
+ ,kns_katakana\
+ ,kns_romaji\
+) values (\
+ NULL, ?, ?, ?\
 );"
 
 # Kangi character insertion
-insertKangiWord = "insert into kangiSystem (
-  ks_kangiID
- ,ks_char
-) values (
-  NULL, ?
+insertKangiWord = "insert into kangiSystem (\
+  ks_kangiID\
+ ,ks_char\
+) values (\
+  NULL, ?\
 );"
 
 ##########################
@@ -66,24 +66,24 @@ insertKangiWord = "insert into kangiSystem (
 
 # If Japanese word does not already exist
 
-insertJapaneseWordKanaLink = "insert into japaneseWordKangiLink (
-  jwkn_japaneseWordID
- ,jwkn_kanaID
- ,jwkn_kanaOrder
-) values (
- ?, ?, ?
+insertJapaneseWordKanaLink = "insert into japaneseWordKangiLink (\
+  jwkn_japaneseWordID\
+ ,jwkn_kanaID\
+ ,jwkn_kanaOrder\
+) values (\
+ ?, ?, ?\
 );"
 
 # Link together a Japanese word and a sequence of Kangi characters
 
 # If word link between Japanese word and Kangi sequence does not
 # already exist
-insertJapaneseWordKangiLink = "insert into japaneseWordKanaLink (
-  jwki_japaneseWordID
- ,jwki_kangiID
- ,jwki_order
-) values (
-  ?, ?, ?
+insertJapaneseWordKangiLink = "insert into japaneseWordKanaLink (\
+  jwki_japaneseWordID\
+ ,jwki_kangiID\
+ ,jwki_order\
+) values (\
+  ?, ?, ?\
 )"
 
 
@@ -94,41 +94,41 @@ insertJapaneseWordKangiLink = "insert into japaneseWordKanaLink (
 # AND English word(s) exists
 
 # complexity will be in the Python that generates jWordOrder, eWordOrder
-insertJapaneseEnglishLinkIndex = "insert into japaneseEnglishWordLinkIndex (
-  jewli_linkID
-) values (
-  NULL
+insertJapaneseEnglishLinkIndex = "insert into japaneseEnglishWordLinkIndex (\
+  jewli_linkID\
+) values (\
+  NULL\
 );"
-getJapaneseEnglishLinkIndex = "select max(jewli_linkID)
+getJapaneseEnglishLinkIndex = "select max(jewli_linkID)\
   from japaneseEnglishWordLinkIndex;"
 
-insertJapaneseWordEnglishLink = "insert into japaneseEnglishWordLink (
-  jewl_linkID --determined by previous SQL query
- ,jewl_japaneseWordID
- ,jewl_englishWordID
- ,jewl_japaneseWordOrder
- ,jewl_englishWordOrder
-) values (
-  NULL, ?, ?, ?, ?
+insertJapaneseWordEnglishLink = "insert into japaneseEnglishWordLink (\
+  jewl_linkID --determined by previous SQL query\
+ ,jewl_japaneseWordID\
+ ,jewl_englishWordID\
+ ,jewl_japaneseWordOrder\
+ ,jewl_englishWordOrder\
+) values (\
+  NULL, ?, ?, ?, ?\
 );"
 
 # Create an English phrase from sequence of English words
 # if phrase does not already exist
 
-insertEnglishPhraseIndex = "insert englishPhraseIndex (
-  epi_ID
-) values (
-  NULL
+insertEnglishPhraseIndex = "insert englishPhraseIndex (\
+  epi_ID\
+) values (\
+  NULL\
 );"
-getEnglishPhraseIndex = "select max(epi_ID)
+getEnglishPhraseIndex = "select max(epi_ID)\
   from englishPhraseIndex;"
 
-insertEnglishPhrase = "insert into englishPhrase (
-  ep_id
- ,ep_englishWordID
- ,ep_order
-) values (
-  ?, ?, ?
+insertEnglishPhrase = "insert into englishPhrase (\
+  ep_id\
+ ,ep_englishWordID\
+ ,ep_order\
+) values (\
+  ?, ?, ?\
 );"
 
 
@@ -138,33 +138,33 @@ insertEnglishPhrase = "insert into englishPhrase (
 
 
 # English word to Kana sequence
-getKanaFromEnglishWord = "SELECT kns_hiragana, kns_katakana, kns_romaji
-FROM kanaSystem
-INNER JOIN japaneseWordKanaLink
-INNER JOIN japaneseEnglishWordLink
-ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
-AND japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
-WHERE japaneseEnglishWordLink.jewl_englishWordID = ?
+getKanaFromEnglishWord = "SELECT kns_hiragana, kns_katakana, kns_romaji\
+FROM kanaSystem\
+INNER JOIN japaneseWordKanaLink\
+INNER JOIN japaneseEnglishWordLink\
+ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID\
+AND japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID\
+WHERE japaneseEnglishWordLink.jewl_englishWordID = ?\
 ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;"
 
 # English sequence to Kana sequence
 # this could be wrong my head is not clear enough.
 
-getKanaFromEnglishPhrase = " SELECT kns_hiragana, kns_katakana, kns_romaji (
-FROM kanaSystem
-INNER JOIN japaneseWordKanaLink
-ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
-INNER JOIN japaneseEnglishWordLink
-ON japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
-INNER JOIN englishPhrase
-ON japaneseEnglishWordLink.jewl_englishWordID = englishPhrase.ep_ID
-WHERE japaneseEnglishWordLink.jewl_englishWordID = ?
+getKanaFromEnglishPhrase = " SELECT kns_hiragana, kns_katakana, kns_romaji (\
+FROM kanaSystem\
+INNER JOIN japaneseWordKanaLink\
+ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID\
+INNER JOIN japaneseEnglishWordLink\
+ON japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID\
+INNER JOIN englishPhrase\
+ON japaneseEnglishWordLink.jewl_englishWordID = englishPhrase.ep_ID\
+WHERE japaneseEnglishWordLink.jewl_englishWordID = ?\
 ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;"
 
 # Japanese word to English sequence
-getEnglishFromJapaneseWord = " SELECT ew_word
-FROM englishWord
-INNER JOIN japaneseEnglishWordLink
-ON englishWord.ew_wordid = japaneseEnglishWordLink.jewl_englishWordID
+getEnglishFromJapaneseWord = " SELECT ew_word\
+FROM englishWord\
+INNER JOIN japaneseEnglishWordLink\
+ON englishWord.ew_wordid = japaneseEnglishWordLink.jewl_englishWordID\
 WHERE japaneseEnglishWordLink.jewl_japaneseWordID = ?;"
 
