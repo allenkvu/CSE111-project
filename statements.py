@@ -83,18 +83,25 @@ insertJapaneseWordEnglishLink = "insert into japaneseEnglishWordLink (
 ######################
 
 # English word to Kana sequence
-getKanaFromEnglishWord = "
-
-"
+getKanaFromEnglishWord = "SELECT kns_hiragana, kns_katakana, kns_romaji (
+FROM kanaSystem
+INNER JOIN japaneseWordKanaLink
+ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
+INNER JOIN japaneseEnglishWordLink
+ON japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
+WHERE japaneseEnglishWordLink.jewl_englishWordID = ?
+ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;"
 
 # English sequence to Kana sequence
 # Peter will do this
-getKanaFromEnglishPhrase = "
+getKanaFromEnglishPhrase = " SELECT 
 
 "
 
 # Japanese word to English sequence
-getEnglishFromJapaneseWord = "
-
-"
+getEnglishFromJapaneseWord = " SELECT ew_word
+FROM englishWord
+INNER JOIN japaneseEnglishWordLink
+ON englishWord.ew_wordid = japaneseEnglishWordLink.jewl_englishWordID
+WHERE japaneseEnglishWordLink.jewl_japaneseWordID = ?;"
 
