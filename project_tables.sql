@@ -1,5 +1,5 @@
-CREATE TABLE englishWord(
-       ew_wordid INTEGER PRIMARY KEY AUTOINCREMENT
+Create TABLE englishWord(
+       ew_wordid INTEGER PRIMARY KEY -- auto increment if NULL inserted
        , ew_word VARCHAR(20)
 );
 
@@ -11,7 +11,7 @@ CREATE TABLE englishWordOpposite(
 );
 
 CREATE TABLE englishPhraseIndex(
-	epi_ID INTEGER PRIMARY KEY AUTOINCREMENT
+	epi_ID INTEGER PRIMARY KEY
 );
 
 CREATE TABLE englishPhrase(   -- English Phrase is now a weak entity set
@@ -19,26 +19,29 @@ CREATE TABLE englishPhrase(   -- English Phrase is now a weak entity set
 	, ep_englishwordID INTEGER NOT NULL
 	, ep_order INTEGER DEFAULT 0
 	, FOREIGN KEY(ep_ID) REFERENCES englishPhraseIndex(epi_ID)
+	, FOREIGN KEY(ep_englishWordID) REFERENCES englishWord(ew_wordid)
 );
 
 --not very sure if right
 --start
 CREATE TABLE japaneseWord(
-        jw_WordID INTEGER PRIMARY KEY AUTOINCREMENT
+        jw_WordID INTEGER PRIMARY KEY
 );
 
 CREATE TABLE japaneseWordPredecessor(
         jwp_japaneseWordID INTEGER
-        , jpp_predecessorID INTEGER
+        , jwp_predecessorID INTEGER
+	, FOREIGN KEY(jwp_japaneseWordID) REFERENCES japaneseWord(jw_WordID)
+	, FOREIGN KEY(jwp_predecessorID) REFERENCES japaneseWord(jw_WordID)
 
 );
 
 
 CREATE TABLE japaneseWordOpposite(
     	jwo_japaneseWordID INTEGER
-    	, jpo_oppositeID INTEGER
+    	, jwo_oppositeID INTEGER
 	, FOREIGN KEY(jwo_japaneseWordID) REFERENCES japaneseWord(jw_WordID)
-	, FOREIGN KEY(jpo_oppositeID) REFERENCES japaneseWord(jw_WordID)
+	, FOREIGN KEY(jwo_oppositeID) REFERENCES japaneseWord(jw_WordID)
 );
 
 CREATE TABLE japaneseWordDescription(
@@ -49,7 +52,7 @@ CREATE TABLE japaneseWordDescription(
 --end
 
 CREATE TABLE japaneseEnglishWordLinkIndex(
-	jewli_linkID INTEGER PRIMARY KEY AUTOINCREMENT
+	jewli_linkID INTEGER PRIMARY KEY
 );
 
 CREATE TABLE japaneseEnglishWordLink(
@@ -90,14 +93,14 @@ CREATE TABLE japaneseWordKanjiLink(
 );
 
 CREATE TABLE kanaSystem(
-	kns_kanaID INTEGER PRIMARY KEY AUTOINCREMENT
+	kns_kanaID INTEGER PRIMARY KEY
 	, kns_hiragana nvarchar(20)
 	, kns_katakana nvarchar(20)
 	, kns_romaji varchar(5)
 );
 
 CREATE TABLE waseiEigoKanaLinkIndex(
-	wekli_linkID INTEGER PRIMARY KEY AUTOINCREMENT
+	wekli_linkID INTEGER PRIMARY KEY
 );
 
 CREATE TABLE waseiEigoKanaLink(
@@ -114,7 +117,7 @@ CREATE TABLE waseiEigoKanaLink(
 );
 
 CREATE TABLE kanjiSystem(
-	ks_kanjiID INTEGER PRIMARY KEY AUTOINCREMENT
+	ks_kanjiID INTEGER PRIMARY KEY
 	, ks_char nvarchar(20) NOT NULL
 );
 
@@ -122,7 +125,7 @@ CREATE TABLE kanjiSystem(
 -- kanji-English is a many to many relationship,
 -- but we only care about 
 --kanjiEnglishLinkIndex(
---	keli_index INTEGER PRIMARY KEY AUTOINCREMENT
+--	keli_index INTEGER PRIMARY KEY
 --);
 CREATE TABLE kanjiEnglishLink(
 --	kel_index INTEGER NOT NULL
@@ -139,7 +142,7 @@ CREATE TABLE kanjiEnglishLink(
 -- Wasei Eigo is just a link to a Japanese word
 -- also a sequence of Kana, by extension
 CREATE TABLE waseiEigo(
-        we_waseiEigoID INTEGER AUTOINCREMENT
+        we_waseiEigoID INTEGER
         , we_japaneseWordID INTEGER NOT NULL
 	, FOREIGN KEY(we_japaneseWordID) REFERENCES
 	  	  japaneseWord(jw_wordID)
