@@ -7,4 +7,6 @@ foo = 'bar'
 # first, most basic insertions
 
 englishWordInsert = "insert into englishWord values (
-NULL, ? );
+NULL, ? );"
+kanaWordInsert =
+kangiWordInsert = 
