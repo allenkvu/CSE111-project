@@ -195,19 +195,11 @@ insert into japaneseWordKanjiLink (
   (select jwkn_japaneseWordID
   from japaneseWordKanaLink a
   inner join japaneseWordKanaLink b
-  inner join japaneseWordKanaLink c
-  inner join japaneseWordKanaLink d
   on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
-  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
-  and c.jwkn_japaneseWordID = d.jwkn_japaneseWordID
-  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'きゅ')
-  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'う')
-  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'け')
-  and d.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'や')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'ま')
   and a.jwkn_order = 0
   and b.jwkn_order = 1
-  and c.jwkn_order = 2
-  and d.jwkn_order = 3
   )
   ,(select ks_kangiID from kangiSystem where ks_char = '山')
   ,0
@@ -228,28 +220,40 @@ insert into japaneseWordkanjiLink values(
 ,(select ks_kangiID from kangiSystem where ks_char = '休')
 , 0
 );
-insert into japaneseWordkanjiLink values(
-1
-,(select ks_kangiID from kangiSystem where ks_char = '憩')
-, 1
-);
 
---kyuusoku
+
 insert into japaneseWordkanjiLink values(
-3
-,(select ks_kangiID from kangiSystem where ks_char = '休')
-, 0
-);
-insert into japaneseWordkanjiLink values(
-3
-, (select ks_kangiID from kangiSystem where ks_char = '息')
+ (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'け')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  )
+,(select ks_kangiID from kangiSystem where ks_char = '憩')
 , 1
 );
 
 --takai 
 
 insert into japaneseWordkanjiLink values(
-2
+  (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  inner join japaneseWordKanaLink c
+  inner join japaneseWordKanaLink d
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'た')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'か')
+  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  and c.jwkn_order = 2
+  )
 , (select ks_kangiID from kangiSystem where ks_char = '高')
 , 0
 );
@@ -257,7 +261,21 @@ insert into japaneseWordkanjiLink values(
 --yasui
 
 insert into japaneseWordkanjiLink values(
-6
+  (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  inner join japaneseWordKanaLink c
+  inner join japaneseWordKanaLink d
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'や')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'す')
+  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  and c.jwkn_order = 2
+  )
 , (select ks_kangiID from kangiSystem where ks_char = '安')
 , 0
 );
@@ -265,7 +283,23 @@ insert into japaneseWordkanjiLink values(
 --mijikai
 
 insert into japaneseWordkanjiLink values(
-7
+  (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  inner join japaneseWordKanaLink c
+  inner join japaneseWordKanaLink d
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and c.jwkn_japaneseWordID = d.jwkn_japaneseWordID
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'み')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'じ')
+  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'か')
+  and d.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  and c.jwkn_order = 2
+  and d.jwkn_order = 3
+  )
 , (select ks_kangiID from kangiSystem where ks_char = '短')
 , 0
 );
@@ -273,13 +307,66 @@ insert into japaneseWordkanjiLink values(
 --hikui
 
 insert into japaneseWordkanjiLink values(
-8
+  (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  inner join japaneseWordKanaLink c
+  inner join japaneseWordKanaLink d
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID 
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'ひ')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'く')
+  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  and c.jwkn_order = 2
+  )
 , (select ks_kangiID from kangiSystem where ks_char = '低')
 , 0
 );
 
 
+insert into englishPhraseIndex values (NULL);
 
+insert into englishPhrase values (
+  (select max(epi_ID) from englishPhraseIndex)
+ ,(select ew_wordid from englishWord where ew_word = 'short')
+ ,0
+);
+
+insert into englishPhrase values (
+  (select max(epi_ID) from englishPhraseIndex)
+ ,(select ew_wordid from englishWord where ew_word = 'for')
+ ,0
+);
+
+insert into englishPhrase values (
+  (select max(epi_ID) from englishPhraseIndex)
+ ,(select ew_wordid from englishWord where ew_word = 'object')
+ ,0
+);
+
+insert into japaneseWordDescription values (
+    (select jwkn_japaneseWordID
+  from japaneseWordKanaLink a
+  inner join japaneseWordKanaLink b
+  inner join japaneseWordKanaLink c
+  inner join japaneseWordKanaLink d
+  on a.jwkn_japaneseWordID = b.jwkn_japaneseWordID
+  and b.jwkn_japaneseWordID = c.jwkn_japaneseWordID
+  and c.jwkn_japaneseWordID = d.jwkn_japaneseWordID
+  and a.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'み')
+  and b.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'じ')
+  and c.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'か')
+  and d.jwkn_kanaID = (select kns_kanaID from kanaSystem where kns_hiragana = 'い')
+  and a.jwkn_order = 0
+  and b.jwkn_order = 1
+  and c.jwkn_order = 2
+  and d.jwkn_order = 3
+  )
+, (select max(epi_ID) from englishPhraseIndex)
+);
 ---------------------------------------------------------------------------------
 -- Link together a sequence of English words and a sequence
 -- of Japanese words.
