@@ -46,7 +46,7 @@ insertKanaWord = "insert into kanaSystem (\
  ,kns_katakana\
  ,kns_romaji\
 ) values (\
- NULL, ?, ?, ?\
+ NULL, '%s', '%s', '%s'\
 );"
 
 # Kangi character insertion
@@ -54,7 +54,7 @@ insertKangiWord = "insert into kangiSystem (\
   ks_kangiID\
  ,ks_char\
 ) values (\
-  NULL, ?\
+  NULL, '%s'\
 );"
 
 ##########################
@@ -71,7 +71,7 @@ insertJapaneseWordKanaLink = "insert into japaneseWordKangiLink (\
  ,jwkn_kanaID\
  ,jwkn_kanaOrder\
 ) values (\
- ?, ?, ?\
+ %i, %i, %i\
 );"
 
 # Link together a Japanese word and a sequence of Kangi characters
@@ -83,7 +83,7 @@ insertJapaneseWordKangiLink = "insert into japaneseWordKanaLink (\
  ,jwki_kangiID\
  ,jwki_order\
 ) values (\
-  ?, ?, ?\
+  %i, %i, %i\
 )"
 
 
@@ -109,7 +109,7 @@ insertJapaneseWordEnglishLink = "insert into japaneseEnglishWordLink (\
  ,jewl_japaneseWordOrder\
  ,jewl_englishWordOrder\
 ) values (\
-  NULL, ?, ?, ?, ?\
+  NULL, \
 );"
 
 # Create an English phrase from sequence of English words
