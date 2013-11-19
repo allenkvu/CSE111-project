@@ -72,3 +72,8 @@ where jw_WordID = 1 and jw_WordID = jwki_japaneseWordID and jwki_kanjiID = ks_ka
 select ks_char, ew_word
 From englishWord, kanjiSystem, kanjiEnglishLink
 where ks_kanjiID = 1 and ks_kanjiID = kel_kanjiID and kel_englishWordID = ew_wordid
+
+--english description for japanese word
+select ew_word
+from englishWord, englishPhrase, japaneseWordDescription
+where jwd_japaneseWordID = 7 and jwd_englishPhraseID = ep_ID and ep_englishwordID = ew_wordid
