@@ -70,6 +70,7 @@ if __name__ == '__main__':
     conn = sql.connect(dbName)
 #    sys.setdefaultencoding('utf-8')
     main(conn)
+    conn.commit()
     conn.close()
 
 
