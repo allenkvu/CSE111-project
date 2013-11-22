@@ -19,7 +19,9 @@ INNER JOIN japaneseWordKanaLink
 INNER JOIN japaneseEnglishWordLink
 ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
 AND japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
-WHERE japaneseEnglishWordLink.jewl_englishWordID = 1
+WHERE japaneseEnglishWordLink.jewl_englishWordID = (
+      select ew_wordID from englishWord where ew_word = 'tall'
+)
 ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;
 
 --# English sequence to Kana sequence
@@ -34,17 +36,17 @@ ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;
 --ON japaneseEnglishWordLink.jewl_englishWordID = englishPhrase.ep_ID\
 --WHERE japaneseEnglishWordLink.jewl_englishWordID = ?\
 --ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;"
-
 SELECT kns_hiragana, kns_katakana, kns_romaji
 FROM kanaSystem
 INNER JOIN japaneseWordKanaLink
-ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
 INNER JOIN japaneseEnglishWordLink
-ON japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
-INNER JOIN englishPhrase\
-ON japaneseEnglishWordLink.jewl_englishWordID = englishPhrase.ep_ID
-WHERE japaneseEnglishWordLink.jewl_englishWordID = 1
-ORDER BY japaneseWordKanaLink.jwkn_kanaOrder;
+ON kanaSystem.kns_kanaID = japaneseWordKanaLink.jwkn_kanaID
+AND japaneseWordKanaLink.jwkn_japaneseWordID = japaneseEnglishWordLink.jewl_japaneseWordID
+WHERE japaneseEnglishWordLink.jewl_englishWordID = (
+      select ew_wordID from englishWord where ew_word in ( 'tall', 'mountain' )
+)
+ORDER BY japaneseEnglishWordLink.jewl_japaneseWordOrder, japaneseWordKanaLink.jwkn_kanaOrder;
+
 
 --# Japanese word to English sequence
 --getEnglishFromJapaneseWord = " SELECT ew_word\
@@ -57,7 +59,14 @@ SELECT ew_word
 FROM englishWord
 INNER JOIN japaneseEnglishWordLink
 ON englishWord.ew_wordid = japaneseEnglishWordLink.jewl_englishWordID
-WHERE japaneseEnglishWordLink.jewl_japaneseWordID = 2;
+WHERE japaneseEnglishWordLink.jewl_japaneseWordID in (
+      select jwkn_japaneseWordID
+      from japaneseWordKanaLink
+      inner join kanaSystem
+      on jwkn_kanaID = kns_kanaID
+      and kns_hiragana in ('や', 'ま')
+)
+order by japaneseEnglishWordLink.jewl_englishWordOrder;
 
 --Japanese word to kanji sequence
 --getKanjiFromJapaneseWord = " Select ks_char\
@@ -69,6 +78,6 @@ from kanjiSystem, japaneseWord, japaneseWordKanjiLink
 where jw_WordID = 1 and jw_WordID = jwki_japaneseWordID and jwki_kanjiID = ks_kanjiID; 
 
 --kanji to english word
-select ks_char, ew_word
-From englishWord, kanjiSystem, kanjiEnglishLink
-where ks_kanjiID = 1 and ks_kanjiID = kel_kanjiID and kel_englishWordID = ew_wordid
+--select ks_char, ew_word
+--From englishWord, kanjiSystem, kanjiEnglishLink
+--where ks_kanjiID = 1 and ks_kanjiID = kel_kanjiID and kel_englishWordID = ew_wordid
