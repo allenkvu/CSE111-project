@@ -31,9 +31,6 @@ object SimpleGUI extends SimpleSwingApplication {
     val myTranslationPublishers = new TranslationPublishers
     val myTranslationSubpanels = new TranslationSubpanels(myTranslationPublishers)
 
-
-
-
     // panels of parent frame
 
     val setupPanel = new BoxPanel (Orientation.Vertical) {
@@ -90,7 +87,7 @@ object SimpleGUI extends SimpleSwingApplication {
     listenTo(mySetupPublishers.clearSetupButton)
 
     listenTo(myTranslationPublishers.clearTranslationButton)
-    listenTo(myTranslationPublishers.katakanaTranslation, 
+    listenTo(myTranslationPublishers.katakanaTranslation,
       myTranslationPublishers.englishTranslation)
     listenTo(myTranslationPublishers.katakanaTranslateButton,
       myTranslationPublishers.englishTranslateButton)
@@ -99,42 +96,49 @@ object SimpleGUI extends SimpleSwingApplication {
       // clear setup
       case ButtonClicked(component) if component ==
           mySetupPublishers.clearSetupButton =>
-        mySetupPublishers.katakanaSetup.text = ""
-        mySetupPublishers.hiraganaSetup.text = ""
-        mySetupPublishers.romajiSetup.text = ""
-        mySetupPublishers.kangiSetup.text = ""
-        mySetupPublishers.englishSetup.text = ""
+        clearSetup(mySetupPublishers)
 
       // clear translation
       case ButtonClicked(component) if component ==
           myTranslationPublishers.clearTranslationButton =>
-        myTranslationPublishers.katakanaTranslation.text = ""
-        myTranslationPublishers.hiraganaTranslation.text = ""
-        myTranslationPublishers.romajiTranslation.text = ""
-        myTranslationPublishers.kangiTranslation.text = ""
-        myTranslationPublishers.englishTranslation.text = ""
-
+        clearTranslation(myTranslationPublishers)
       // translate katakana button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.katakanaTranslateButton =>
         //englishTranslation.text = japaneseTranslation.text
         myTranslationPublishers.englishTranslation.text =
           //"from db: " + DBTools.getEnglish(myConn)
-          "from db: " + DBTools.getRegion(conn)
+          "foo"
 
       // translate english button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.englishTranslateButton =>
-        //myTranslationPublishers.katakanaTranslation.text =
-        //myTranslationPublishers.englishTranslation.text
         //DBTools.newRegion(conn, 101, myTranslationPublishers.englishTranslation.text)
-        //DBTools.newRegion(conn, 1241, "foo")
-        DBTools.newRegion(conn)
+        myTranslationPublishers.katakanaTranslation.text = "bar"
 
 
 
     }
 
-
   }
+
+  def clearSetup(mySetupPublishers: SetupPublishers) = {
+    mySetupPublishers.katakanaSetup.text = ""
+    mySetupPublishers.hiraganaSetup.text = ""
+    mySetupPublishers.romajiSetup.text = ""
+    mySetupPublishers.kangiSetup.text = ""
+    mySetupPublishers.englishSetup.text = ""
+  }
+  def clearTranslation(myTranslationPublishers: TranslationPublishers) = {
+    myTranslationPublishers.katakanaTranslation.text = ""
+    myTranslationPublishers.hiraganaTranslation.text = ""
+    myTranslationPublishers.romajiTranslation.text = ""
+    myTranslationPublishers.kangiTranslation.text = ""
+    myTranslationPublishers.englishTranslation.text = ""
+  }
+
+
+
+
+
 }

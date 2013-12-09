@@ -8,7 +8,7 @@ import scala.util.Random
 
 
 class SetupPublishers {
-
+/*
   val katakanaSetup = new TextField
   val hiraganaSetup = new TextField
   val romajiSetup = new TextField
@@ -16,6 +16,15 @@ class SetupPublishers {
   val kangiSetup = new TextField
 
   val englishSetup = new TextField
+ */
+  val katakanaSetup = new TextArea
+  val hiraganaSetup = new TextArea
+  val romajiSetup = new TextArea
+
+  val kangiSetup = new TextArea
+
+  val englishSetup = new TextArea
+
 
 /*  val katakanaTranslateButton = new Button {
     text = "Translate Katakana"

@@ -25,7 +25,8 @@ class DBConn {
   var stat: Statement = null
 
   try {
-    conn = DriverManager.getConnection("jdbc:sqlite:lab3db")
+    //conn = DriverManager.getConnection("jdbc:sqlite:lab3db")
+    conn = DriverManager.getConnection("jdbc:sqlite:translator.db")
     stat = conn.createStatement();
   } catch {
     case sqle: SQLException =>
@@ -57,18 +58,9 @@ object DBTools {
   
 //  def newRegion(conn: Connection, r_regionkey: Int, r_name: String) = {
   def newRegion(conn: Connection) = {
-/*    val prepStat: PreparedStatement = conn.prepareStatement("""
-insert into region (r_regionkey, r_name) values ( %d, %s );
-""")
- */
     val prepStat: PreparedStatement = conn.prepareStatement("""insert into region values (4, 'foo', 'nocomment')""")
-
-
     //prepStat.setInt(1, r_regionkey)
     //prepStat.setString(2, r_name)
-
-    //prepStat.setInt(1, 101)
-    //prepStat.setString(2, "foobar")*/
     try {
       prepStat.executeUpdate()
     } catch {
