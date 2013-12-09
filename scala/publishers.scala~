@@ -1,0 +1,10 @@
+package translator
+
+import swing._
+import swing.BorderPanel.Position._
+import event._
+import java.awt.{ Color, Graphics2D }
+import scala.util.Random
+
+
+object panel {
