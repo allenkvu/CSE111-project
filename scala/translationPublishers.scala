@@ -46,7 +46,7 @@ class TranslationPublishers {
   }
 
   val clearTranslationButton = new Button {
-    text = "Clear Translations"
+    text = "Clear Translation Fields"
     borderPainted = true
     enabled = true
   }

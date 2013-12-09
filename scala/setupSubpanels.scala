@@ -6,61 +6,61 @@ import event._
 import java.awt.{ Color, Graphics2D }
 import scala.util.Random
 
-class TranslationSubpanels (pub: TranslationPublishers) {
+class SetupSubpanels (pub: SetupPublishers) {
 
     // Japanese Katakana panel
-    val katakanaTranslationPanel = new BorderPanel {
+    val katakanaSetupPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Katakana"
+        text = "Katakana"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
-      layout(pub.katakanaTranslation) = Center
-      layout(pub.katakanaTranslateButton) = South
+      layout(pub.katakanaSetup) = Center
+      //layout(pub.katakanaTranslateButton) = South
     }
     // Japanese Hiragana panel
-    val hiraganaTranslationPanel = new BorderPanel {
+    val hiraganaSetupPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Hiragana"
+        text = "Hiragana"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
-      layout(pub.hiraganaTranslation) = Center
-      layout(pub.hiraganaTranslateButton) = South
+      layout(pub.hiraganaSetup) = Center
+      //layout(pub.hiraganaTranslateButton) = South
     }
     // Japanese Romaji panel
-    val romajiTranslationPanel = new BorderPanel {
+    val romajiSetupPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Romaji"
+        text = "Romaji"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
-      layout(pub.romajiTranslation) = Center
-      layout(pub.romajiTranslateButton) = South
+      layout(pub.romajiSetup) = Center
+      //layout(pub.romajiTranslateButton) = South
     }
     // Japanese Kangi panel
-    val kangiTranslationPanel = new BorderPanel {
+    val kangiSetupPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Kangi"
+        text = "Kangi"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
-      layout(pub.kangiTranslation) = Center
-      layout(pub.kangiTranslateButton) = South
+      layout(pub.kangiSetup) = Center
+      //layout(pub.kangiTranslateButton) = South
     }
 
     // English panel
-    val englishTranslationPanel = new BorderPanel {
+    val englishSetupPanel = new BorderPanel {
       layout(new Label {
         text = "English"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
-      layout(pub.englishTranslation) = Center
-      layout(pub.englishTranslateButton) = South
+      layout(pub.englishSetup) = Center
+      //layout(pub.englishTranslateButton) = South
     }
 
 }

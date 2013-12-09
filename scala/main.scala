@@ -22,7 +22,8 @@ object SimpleGUI extends SimpleSwingApplication {
     }
 
 
-    // buttons and text boxes -- setup
+    val mySetupPublishers = new SetupPublishers
+    val mySetupSubpanels = new SetupSubpanels(mySetupPublishers)
 
     val myTranslationPublishers = new TranslationPublishers
     val myTranslationSubpanels = new TranslationSubpanels(myTranslationPublishers)
@@ -32,14 +33,23 @@ object SimpleGUI extends SimpleSwingApplication {
 
     // panels of parent frame
 
-    val setupPanel = new FlowPanel {
+    val setupPanel = new BoxPanel (Orientation.Vertical) {
       // 'setup' title
       contents += new Label {
         text = "Setup"
         font = new Font("Ariel", java.awt.Font.PLAIN, 20)
       }
-      // setup interface
-      //contents +=
+      contents += mySetupSubpanels.katakanaSetupPanel
+      contents += mySetupSubpanels.hiraganaSetupPanel
+      contents += mySetupSubpanels.romajiSetupPanel
+      contents += mySetupSubpanels.kangiSetupPanel
+
+      contents += mySetupSubpanels.englishSetupPanel
+
+      contents += mySetupPublishers.setupButton
+      
+      contents += mySetupPublishers.clearSetupButton
+
     }
 
     // Translation Panel
@@ -73,7 +83,9 @@ object SimpleGUI extends SimpleSwingApplication {
 
     }
 
-    //listenTo(myTranslationPublishers.exitButton)
+    listenTo(mySetupPublishers.setupButton)
+    listenTo(mySetupPublishers.clearSetupButton)
+
     listenTo(myTranslationPublishers.clearTranslationButton)
     listenTo(myTranslationPublishers.katakanaTranslation, 
       myTranslationPublishers.englishTranslation)
@@ -81,9 +93,14 @@ object SimpleGUI extends SimpleSwingApplication {
       myTranslationPublishers.englishTranslateButton)
 
     reactions += {
-      /*case ButtonClicked(component) if component == myTranslationPublishers.exitButton =>
-        //sys.exit(0)
-        dispose()*/
+      case ButtonClicked(component) if component ==
+          mySetupPublishers.clearSetupButton =>
+        mySetupPublishers.katakanaSetup.text = ""
+        mySetupPublishers.hiraganaSetup.text = ""
+        mySetupPublishers.romajiSetup.text = ""
+        mySetupPublishers.kangiSetup.text = ""
+        mySetupPublishers.englishSetup.text = ""
+
       case ButtonClicked(component) if component ==
           myTranslationPublishers.clearTranslationButton =>
         myTranslationPublishers.katakanaTranslation.text = ""
@@ -97,7 +114,7 @@ object SimpleGUI extends SimpleSwingApplication {
           myTranslationPublishers.katakanaTranslateButton =>
         //englishTranslation.text = japaneseTranslation.text
         myTranslationPublishers.englishTranslation.text =
-          myTranslationPublishers.katakanaTranslation.text + dbTools.getEnglish(myConn)
+          "from db: " + dbTools.getEnglish(myConn)
 
 
       case ButtonClicked(component) if component ==

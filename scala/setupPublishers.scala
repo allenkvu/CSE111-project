@@ -7,17 +7,17 @@ import java.awt.{ Color, Graphics2D }
 import scala.util.Random
 
 
-class TranslationPublishers {
+class SetupPublishers {
 
-  val katakanaTranslation = new TextField
-  val hiraganaTranslation = new TextField
-  val romajiTranslation = new TextField
+  val katakanaSetup = new TextField
+  val hiraganaSetup = new TextField
+  val romajiSetup = new TextField
 
-  val kangiTranslation = new TextField
+  val kangiSetup = new TextField
 
-  val englishTranslation = new TextField
+  val englishSetup = new TextField
 
-  val katakanaTranslateButton = new Button {
+/*  val katakanaTranslateButton = new Button {
     text = "Translate Katakana"
     borderPainted = true
     enabled = true
@@ -38,15 +38,22 @@ class TranslationPublishers {
     borderPainted = true
     enabled = true
   }
-
+ 
   val englishTranslateButton = new Button {
     text = "Translate English"
     borderPainted = true
     enabled = true
   }
+ */
 
-  val clearTranslationButton = new Button {
-    text = "Clear Translations"
+  val setupButton = new Button {
+    text = "Enter filled fields into DB"
+    borderPainted = true
+    enabled = true
+  }
+
+  val clearSetupButton = new Button {
+    text = "Clear Setup Fields"
     borderPainted = true
     enabled = true
   }

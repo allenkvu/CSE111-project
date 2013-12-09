@@ -12,7 +12,7 @@ class TranslationSubpanels (pub: TranslationPublishers) {
     val katakanaTranslationPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Katakana"
+        text = "Katakana"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
@@ -23,7 +23,7 @@ class TranslationSubpanels (pub: TranslationPublishers) {
     val hiraganaTranslationPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Hiragana"
+        text = "Hiragana"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
@@ -34,7 +34,7 @@ class TranslationSubpanels (pub: TranslationPublishers) {
     val romajiTranslationPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Romaji"
+        text = "Romaji"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
@@ -45,7 +45,7 @@ class TranslationSubpanels (pub: TranslationPublishers) {
     val kangiTranslationPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Japanese Kangi"
+        text = "Kangi"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
