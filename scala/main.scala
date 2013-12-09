@@ -15,7 +15,8 @@ object SimpleGUI extends SimpleSwingApplication {
     menuBar = new MenuBar {
       contents += new Menu("File") {
         contents += new MenuItem(Action("Exit") {
-          sys.exit(0)
+          //sys.exit(0)
+          dispose()
         })
       }
     }
@@ -23,7 +24,11 @@ object SimpleGUI extends SimpleSwingApplication {
 
     // buttons and text boxes -- setup
 
-    val myPublishers = new publishers
+    val myTranslationPublishers = new TranslationPublishers
+    val myTranslationSubpanels = new TranslationSubpanels(myTranslationPublishers)
+
+
+
 
     // panels of parent frame
 
@@ -45,28 +50,15 @@ object SimpleGUI extends SimpleSwingApplication {
         horizontalAlignment = Alignment.Center
       }
 
+      contents += myTranslationSubpanels.katakanaTranslationPanel
+      contents += myTranslationSubpanels.hiraganaTranslationPanel
+      contents += myTranslationSubpanels.romajiTranslationPanel
+      contents += myTranslationSubpanels.kangiTranslationPanel
 
-      // Japanese
-      contents += new Label {
-        text = "Japanese"
-        font = new Font("ariel", java.awt.Font.PLAIN, 10)
-      }
-      
-      /*contents += new TextField ("Japanese") {
-        editable = false
-      }*/
-      contents += myPublishers.japaneseTranslation
-      contents += myPublishers.japaneseTranslateButton
+      contents += myTranslationSubpanels.englishTranslationPanel
 
-      // English
-      contents += new Label {
-        text = "English"
-        font = new Font("ariel", java.awt.Font.PLAIN, 10)
-      }
-      contents += myPublishers.englishTranslation
-      contents += myPublishers.englishTranslateButton
-
-      contents += myPublishers.exitButton
+      //contents += myTranslationPublishers.exitButton
+      contents += myTranslationPublishers.clearTranslationButton
 
     }
 
@@ -81,29 +73,37 @@ object SimpleGUI extends SimpleSwingApplication {
 
     }
 
-    listenTo(myPublishers.exitButton)
-    listenTo(myPublishers.japaneseTranslation, myPublishers.englishTranslation)
-    listenTo(myPublishers.japaneseTranslateButton, myPublishers.englishTranslateButton)
+    //listenTo(myTranslationPublishers.exitButton)
+    listenTo(myTranslationPublishers.clearTranslationButton)
+    listenTo(myTranslationPublishers.katakanaTranslation, 
+      myTranslationPublishers.englishTranslation)
+    listenTo(myTranslationPublishers.katakanaTranslateButton,
+      myTranslationPublishers.englishTranslateButton)
 
     reactions += {
-      case ButtonClicked(component) if component == myPublishers.exitButton =>
-        //dispose()
-        sys.exit(0)
+      /*case ButtonClicked(component) if component == myTranslationPublishers.exitButton =>
+        //sys.exit(0)
+        dispose()*/
+      case ButtonClicked(component) if component ==
+          myTranslationPublishers.clearTranslationButton =>
+        myTranslationPublishers.katakanaTranslation.text = ""
+        myTranslationPublishers.hiraganaTranslation.text = ""
+        myTranslationPublishers.romajiTranslation.text = ""
+        myTranslationPublishers.kangiTranslation.text = ""
+        myTranslationPublishers.englishTranslation.text = ""
 
-      /*case EditDone(`japaneseTranslation`) =>
-        englishTranslation.text = dbTools.getEnglish(myConn)
 
-      case EditDone(`englishTranslation`) =>
-        print("English input")
-       */
-
-      case ButtonClicked(component) if component == myPublishers.japaneseTranslateButton =>
+      case ButtonClicked(component) if component ==
+          myTranslationPublishers.katakanaTranslateButton =>
         //englishTranslation.text = japaneseTranslation.text
-        myPublishers.englishTranslation.text = myPublishers.japaneseTranslation.text + dbTools.getEnglish(myConn)
+        myTranslationPublishers.englishTranslation.text =
+          myTranslationPublishers.katakanaTranslation.text + dbTools.getEnglish(myConn)
 
 
-      case ButtonClicked(component) if component == myPublishers.englishTranslateButton =>
-        myPublishers.japaneseTranslation.text = myPublishers.englishTranslation.text
+      case ButtonClicked(component) if component ==
+          myTranslationPublishers.englishTranslateButton =>
+        myTranslationPublishers.katakanaTranslation.text =
+          myTranslationPublishers.englishTranslation.text
 
 
 
