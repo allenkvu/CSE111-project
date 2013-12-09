@@ -8,7 +8,7 @@ import scala.util.Random
 
 object SimpleGUI extends SimpleSwingApplication {
 
-  val myConn = new dbConn
+  val myConn = new DBConn
 
   def top = new MainFrame {
     title = "Japanese-English Translator"
@@ -114,7 +114,7 @@ object SimpleGUI extends SimpleSwingApplication {
           myTranslationPublishers.katakanaTranslateButton =>
         //englishTranslation.text = japaneseTranslation.text
         myTranslationPublishers.englishTranslation.text =
-          "from db: " + dbTools.getEnglish(myConn)
+          "from db: " + DBTools.getEnglish(myConn)
 
 
       case ButtonClicked(component) if component ==
