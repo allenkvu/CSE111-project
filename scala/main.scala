@@ -8,7 +8,9 @@ import scala.util.Random
 
 object SimpleGUI extends SimpleSwingApplication {
 
-  val myConn = new DBConn
+  val myConnClass = new DBConn
+  val conn = myConnClass.getConn
+  val stat = myConnClass.getStat
 
   def top = new MainFrame {
     title = "Japanese-English Translator"
@@ -16,6 +18,7 @@ object SimpleGUI extends SimpleSwingApplication {
       contents += new Menu("File") {
         contents += new MenuItem(Action("Exit") {
           //sys.exit(0)
+          conn.close()
           dispose()
         })
       }
@@ -93,6 +96,7 @@ object SimpleGUI extends SimpleSwingApplication {
       myTranslationPublishers.englishTranslateButton)
 
     reactions += {
+      // clear setup
       case ButtonClicked(component) if component ==
           mySetupPublishers.clearSetupButton =>
         mySetupPublishers.katakanaSetup.text = ""
@@ -101,6 +105,7 @@ object SimpleGUI extends SimpleSwingApplication {
         mySetupPublishers.kangiSetup.text = ""
         mySetupPublishers.englishSetup.text = ""
 
+      // clear translation
       case ButtonClicked(component) if component ==
           myTranslationPublishers.clearTranslationButton =>
         myTranslationPublishers.katakanaTranslation.text = ""
@@ -109,18 +114,22 @@ object SimpleGUI extends SimpleSwingApplication {
         myTranslationPublishers.kangiTranslation.text = ""
         myTranslationPublishers.englishTranslation.text = ""
 
-
+      // translate katakana button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.katakanaTranslateButton =>
         //englishTranslation.text = japaneseTranslation.text
         myTranslationPublishers.englishTranslation.text =
-          "from db: " + DBTools.getEnglish(myConn)
+          //"from db: " + DBTools.getEnglish(myConn)
+          "from db: " + DBTools.getRegion(conn)
 
-
+      // translate english button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.englishTranslateButton =>
-        myTranslationPublishers.katakanaTranslation.text =
-          myTranslationPublishers.englishTranslation.text
+        //myTranslationPublishers.katakanaTranslation.text =
+        //myTranslationPublishers.englishTranslation.text
+        //DBTools.newRegion(conn, 101, myTranslationPublishers.englishTranslation.text)
+        //DBTools.newRegion(conn, 1241, "foo")
+        DBTools.newRegion(conn)
 
 
 
