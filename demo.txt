@@ -1,0 +1,10 @@
+demo (random words in form of hiragana katakana romaji kanji english)
+
+いぬ
+ナミダ
+deguchi
+机
+river
+
+insertion demo
+ふく　フク　fuku　服 clothes
