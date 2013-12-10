@@ -92,11 +92,60 @@ object SimpleGUI extends SimpleSwingApplication {
     listenTo(myTranslationPublishers.katakanaTranslateButton,
       myTranslationPublishers.englishTranslateButton)
 
+    // REACTIONS
     reactions += {
       // clear setup
       case ButtonClicked(component) if component ==
           mySetupPublishers.clearSetupButton =>
         clearSetup(mySetupPublishers)
+
+        // do setup
+        // link between all 5 types
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && (mySetupPublishers.katakanaSetup.text != "")
+            && (mySetupPublishers.hiraganaSetup.text != "")
+            && (mySetupPublishers.romajiSetup.text != "")
+            && (mySetupPublishers.kangiSetup.text != "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) => {
+           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
+          }
+
+        // link between English and Kana
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && (mySetupPublishers.katakanaSetup.text != "")
+            && (mySetupPublishers.hiraganaSetup.text != "")
+            && (mySetupPublishers.romajiSetup.text != "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) => {
+           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
+          }
+
+        // insert English
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && (mySetupPublishers.katakanaSetup.text != "")
+            && (mySetupPublishers.hiraganaSetup.text != "")
+            && (mySetupPublishers.romajiSetup.text != "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) => {
+           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
+          }
+
+        // insert Kana
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && (mySetupPublishers.katakanaSetup.text != "")
+            && (mySetupPublishers.hiraganaSetup.text != "")
+            && (mySetupPublishers.romajiSetup.text != "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) => {
+           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
+          }
+
+
 
       // clear translation
       case ButtonClicked(component) if component ==
@@ -104,11 +153,25 @@ object SimpleGUI extends SimpleSwingApplication {
         clearTranslation(myTranslationPublishers)
       // translate katakana button
       case ButtonClicked(component) if component ==
-          myTranslationPublishers.katakanaTranslateButton =>
-        //englishTranslation.text = japaneseTranslation.text
-        myTranslationPublishers.englishTranslation.text =
+          myTranslationPublishers.katakanaTranslateButton => {
+            //println("click")
+            myTranslationPublishers.englishTranslation.text = ""
+            val ew = DBQueries.getEnglishWords(conn)
+            //println("got")
+            
+            //for(w <- ew){
+             // pw.englishWord)
+              //myTranslationPublishers.englishTranslation.text += w.englishWord
+            //}
+            myTranslationPublishers.englishTranslation.text =
+              ew.foldLeft("")((a: String,b: DBTypes.EnglishWord) => a+b.englishWord+"\n")
+
+          }
+
+
           //"from db: " + DBTools.getEnglish(myConn)
-          "foo"
+        
+
 
       // translate english button
       case ButtonClicked(component) if component ==
@@ -121,6 +184,7 @@ object SimpleGUI extends SimpleSwingApplication {
     }
 
   }
+
 
   def clearSetup(mySetupPublishers: SetupPublishers) = {
     mySetupPublishers.katakanaSetup.text = ""

@@ -13,3 +13,5 @@ run
 quit()
 exit
 run
+var bar = "abc"
+run

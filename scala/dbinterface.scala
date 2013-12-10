@@ -26,7 +26,9 @@ class DBConn {
 
   try {
     //conn = DriverManager.getConnection("jdbc:sqlite:lab3db")
-    conn = DriverManager.getConnection("jdbc:sqlite:translator.db")
+    //conn = DriverManager.getConnection("jdbc:sqlite:translator.db")
+    conn = DriverManager.getConnection("jdbc:sqlite:foobar.db")
+
     stat = conn.createStatement();
   } catch {
     case sqle: SQLException =>
@@ -50,11 +52,34 @@ class DBConn {
 }
 
 object DBTypes {
-  case class Region (regionkey: Int, name: String, comment: String)
+  //case class Region (regionkey: Int, name: String, comment: String)
+  case class Kana (wordID: Int, katakana: String, hiragana: String, romaji: String)
+  case class Kangi (wordID: Int, kangi: String)
+  case class EnglishWord (wordID: Int, englishWord: String)
 
 }
 
 object DBTools {
+
+  def parseEnglishSetup(conn: Connection, text: String): List[DBTypes.EnglishWord] = {
+    val wordsStrings = text.split(" ")
+    for(word <- wordsStrings){
+      if(DBQueries.englishWordExists(conn, word) == false){
+        DBStatements.insertEnglishWord(conn, word)
+      } 
+    } 
+    val arr = for(word <- wordsStrings) yield DBQueries.getEnglishWord(conn, word)
+    arr.toList
+
+
+  }
+}
+
+object DBQueries {
+
+
+
+
   
 //  def newRegion(conn: Connection, r_regionkey: Int, r_name: String) = {
   def newRegion(conn: Connection) = {
@@ -84,5 +109,89 @@ limit 1
     result.getString("r_name")
     
   }
+  def englishWordExists(conn: Connection, word: String): Boolean = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglishWord)
+      prepStat.setString(1, word)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      val result = resultSet.getInt(1)
+        //println(word)
+      if(result==1) true else false
+
+    } catch {
+      case sqle: SQLException =>
+        println("find English word failed")
+        println(sqle.getMessage())
+        false
+    }
+    
+  }
+
+  def getEnglishWord(conn: Connection, wordIn: String): DBTypes.EnglishWord = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglishWord)
+      prepStat.setString(1, wordIn)
+      val resultSet: ResultSet = prepStat.executeQuery()
+
+      var word: String = ""
+      if(resultSet.next()){
+        //print("got English word  ")
+        val id = resultSet.getInt("ew_wordID")
+        val word = resultSet.getString("ew_word")
+
+        new DBTypes.EnglishWord(id, word)
+
+      } else {
+        new DBTypes.EnglishWord(0, "NONE")
+      }
+    } catch {
+      case sqle: SQLException =>
+        println("get english words failed")
+        println(sqle.getMessage())
+        DBTypes.EnglishWord(0, "NONE")
+    }
+    
+  }
+
+  def getEnglishWords(conn: Connection): List[DBTypes.EnglishWord] = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglishWords)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      var outputSet = List[DBTypes.EnglishWord]()
+      var id: Int = 0
+      var word: String = ""
+      while(resultSet.next()){
+        //print("got English word  ")
+        id = resultSet.getInt("ew_wordID")
+        word = resultSet.getString("ew_word")
+
+        outputSet = outputSet :+ new DBTypes.EnglishWord(id, word)
+      }
+      outputSet
+
+    } catch {
+      case sqle: SQLException =>
+        println("get english words failed")
+        println(sqle.getMessage())
+        List[DBTypes.EnglishWord]()
+    }
+  }
+
 }
 
+object DBStatements {
+  def insertEnglishWord(conn: Connection, word: String) = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(StatementText.insertEnglishWord)
+      prepStat.setString(1, word)
+      prepStat.executeUpdate()
+      
+    } catch {
+      case sqle: SQLException =>
+        println("find English word failed")
+        println(sqle.getMessage())
+        false
+    }
+  }
+    
+}
