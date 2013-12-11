@@ -80,7 +80,7 @@ object DBQueries {
 
 
 
-  
+/*  
 //  def newRegion(conn: Connection, r_regionkey: Int, r_name: String) = {
   def newRegion(conn: Connection) = {
     val prepStat: PreparedStatement = conn.prepareStatement("""insert into region values (4, 'foo', 'nocomment')""")
@@ -109,9 +109,10 @@ limit 1
     result.getString("r_name")
     
   }
+ */
   def englishWordExists(conn: Connection, word: String): Boolean = {
     try {
-      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglishWord)
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglish)
       prepStat.setString(1, word)
       val resultSet: ResultSet = prepStat.executeQuery()
       val result = resultSet.getInt(1)
@@ -119,6 +120,7 @@ limit 1
       if(result==1) true else false
 
     } catch {
+      case sqlnoelem: 
       case sqle: SQLException =>
         println("find English word failed")
         println(sqle.getMessage())
@@ -127,9 +129,11 @@ limit 1
     
   }
 
+  def 
+
   def getEnglishWord(conn: Connection, wordIn: String): DBTypes.EnglishWord = {
     try {
-      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglishWord)
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getEnglish)
       prepStat.setString(1, wordIn)
       val resultSet: ResultSet = prepStat.executeQuery()
 
@@ -141,7 +145,7 @@ limit 1
 
         new DBTypes.EnglishWord(id, word)
 
-      } else {
+      } else { // not found
         new DBTypes.EnglishWord(0, "NONE")
       }
     } catch {

@@ -15,3 +15,8 @@ exit
 run
 var bar = "abc"
 run
+exit
+run
+exit
+run
+~ run

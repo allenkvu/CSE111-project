@@ -2,14 +2,23 @@ package translator
 
 object QueryText {
 
-  val getEnglishWords = """select * from englishWord;"""
-  val getEnglishWord = """select * from englishWord where ew_word = ?;"""
-  val englishWordCount = """select count(*) from englishWord where ew_word = ?;"""
-  val getKana = """select * from kanaSystem;"""
-  val getHiragana = """select kns_hiragana from kanaSystem;"""
-  val getKatakana = """select kns_katakana from kanaSystem;"""
-  val getRomaji = """select kns_romaji from kanaSystem;"""
-  val getKangi = """select * from kangiSystem;"""
+  val getAllEnglish = """select * from englishWord;"""
+  val getEnglish = """select * from englishWord where ew_word = ?;"""
+  val englishCount = """select count(*) from englishWord where ew_word = ?;"""
+  val getAllKana = """select * from kanaSystem;"""
+  val getHiragana = """select * from kanaSystem where kns_hiragana = '?';"""
+  val getKatakana = """select * from kanaSystem where kns_katakana = '?';"""
+  val getRomaji = """select * from kanaSystem where kns_romaji = '?';"""
+  val kanaCount = """select count(*) from kanaSystem;"""
+
+  val getKangi = """select * from kanjiSystem where ks_char = '?';"""
+  val kangiCount = """select count(*) from kangiSystem;"""
+
+
+  val getAllHiragana = """select kns_hiragana from kanaSystem;"""
+  val getAllKatakana = """select kns_katakana from kanaSystem;"""
+  val getAllRomaji = """select kns_romaji from kanaSystem;"""
+  val getAllKangi = """select * from kangiSystem;"""
 
   val getKanaFromEnglishWord = """
 SELECT kns_hiragana, kns_katakana, kns_romaji

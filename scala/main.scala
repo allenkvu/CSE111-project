@@ -36,7 +36,7 @@ object SimpleGUI extends SimpleSwingApplication {
     val setupPanel = new BoxPanel (Orientation.Vertical) {
       // 'setup' title
       contents += new Label {
-        text = "Setup"
+        text = "Setupadsfasdf"
         font = new Font("Ariel", java.awt.Font.PLAIN, 20)
       }
       contents += mySetupSubpanels.katakanaSetupPanel
@@ -83,6 +83,8 @@ object SimpleGUI extends SimpleSwingApplication {
 
     }
 
+    //listenTo(this.ke)
+
     listenTo(mySetupPublishers.setupButton)
     listenTo(mySetupPublishers.clearSetupButton)
 
@@ -94,13 +96,17 @@ object SimpleGUI extends SimpleSwingApplication {
 
     // REACTIONS
     reactions += {
+      case KeyPressed(_, Key.Escape, _, _) => {
+        conn.close()
+        dispose()
+      }
       // clear setup
       case ButtonClicked(component) if component ==
           mySetupPublishers.clearSetupButton =>
         clearSetup(mySetupPublishers)
 
-        // do setup
-        // link between all 5 types
+        // SETUP
+        // setup link between all 5 types
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
@@ -112,7 +118,7 @@ object SimpleGUI extends SimpleSwingApplication {
            val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
           }
 
-        // link between English and Kana
+      // setup link between English and Kana
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
@@ -123,7 +129,7 @@ object SimpleGUI extends SimpleSwingApplication {
            val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
           }
 
-        // insert English
+      // setup insert English
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
@@ -134,7 +140,7 @@ object SimpleGUI extends SimpleSwingApplication {
            val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
           }
 
-        // insert Kana
+      // setup insert Kana
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
