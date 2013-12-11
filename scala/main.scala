@@ -6,6 +6,8 @@ import event._
 import java.awt.{ Color, Graphics2D }
 import scala.util.Random
 
+import java.sql.Connection
+
 object SimpleGUI extends SimpleSwingApplication {
 
   val myConnClass = new DBConn
@@ -25,6 +27,8 @@ object SimpleGUI extends SimpleSwingApplication {
     }
 
 
+    val myCountPanel = new CountPanel
+
     val mySetupPublishers = new SetupPublishers
     val mySetupSubpanels = new SetupSubpanels(mySetupPublishers)
 
@@ -33,10 +37,12 @@ object SimpleGUI extends SimpleSwingApplication {
 
     // panels of parent frame
 
+
+
     val setupPanel = new BoxPanel (Orientation.Vertical) {
       // 'setup' title
       contents += new Label {
-        text = "Setupadsfasdf"
+        text = "Setup"
         font = new Font("Ariel", java.awt.Font.PLAIN, 20)
       }
       contents += mySetupSubpanels.katakanaSetupPanel
@@ -79,6 +85,7 @@ object SimpleGUI extends SimpleSwingApplication {
       //border = javax.swing.border.LineBorder(Color.black)
       contents += setupPanel
       contents += translationPanel
+      contents += myCountPanel.countPanel
 
 
     }
@@ -161,16 +168,10 @@ object SimpleGUI extends SimpleSwingApplication {
       case ButtonClicked(component) if component ==
           myTranslationPublishers.katakanaTranslateButton => {
             //println("click")
-            myTranslationPublishers.englishTranslation.text = ""
+/*            myTranslationPublishers.englishTranslation.text = ""
             val ew = DBQueries.getEnglishWords(conn)
-            //println("got")
-            
-            //for(w <- ew){
-             // pw.englishWord)
-              //myTranslationPublishers.englishTranslation.text += w.englishWord
-            //}
             myTranslationPublishers.englishTranslation.text =
-              ew.foldLeft("")((a: String,b: DBTypes.EnglishWord) => a+b.englishWord+"\n")
+              ew.foldLeft("")((a: String,b: DBTypes.EnglishWord) => a+b.englishWord+"\n")*/
 
           }
 
@@ -184,12 +185,25 @@ object SimpleGUI extends SimpleSwingApplication {
           myTranslationPublishers.englishTranslateButton =>
         //DBTools.newRegion(conn, 101, myTranslationPublishers.englishTranslation.text)
         myTranslationPublishers.katakanaTranslation.text = "bar"
+        updateCountText(conn, myCountPanel)
 
 
 
     }
 
   }
+
+  def updateCountText(conn: Connection, panel: CountPanel) = {
+    val kanac = DBQueries.kanaWordCount(conn)
+    panel.countPanel.kanaCount.text = kanac.toString
+    val kanjic = DBQueries.kanjiWordCount(conn)
+    panel.countPanel.kanjiCount.text = kanjic.toString
+    val japanesec = DBQueries.japaneseWordCount(conn)
+    panel.countPanel.japaneseCount.text = japanesec.toString
+    val englishc = DBQueries.englishWordCount(conn)
+    panel.countPanel.englishCount.text = englishc.toString
+  }
+
 
 
   def clearSetup(mySetupPublishers: SetupPublishers) = {
