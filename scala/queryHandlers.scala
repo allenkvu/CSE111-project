@@ -124,6 +124,62 @@ object DBQueries {
   }
 
   /* Do not insert any new Kana characters */
+
+  def katakanaExists(conn: Connection, katakana: String): Boolean = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.katakanaExists)
+      prepStat.setString(1, katakana)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      val result = resultSet.getInt(1)
+      //println(word)
+      if(result==1) true else false
+
+    } catch {
+      //      case sqlnoelem:
+      case sqle: SQLException =>
+        println("katkana exists failed")
+        println(sqle.getMessage())
+        false
+    }
+    
+  }
+  def hiraganaExists(conn: Connection, hiragana: String): Boolean = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.hiraganaExists)
+      prepStat.setString(1, hiragana)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      val result = resultSet.getInt(1)
+      //println(word)
+      if(result==1) true else false
+
+    } catch {
+      //      case sqlnoelem:
+      case sqle: SQLException =>
+        println("hiragana exists failed")
+        println(sqle.getMessage())
+        false
+    }
+    
+  }
+  def romajiExists(conn: Connection, romaji: String): Boolean = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.romajiExists)
+      prepStat.setString(1, romaji)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      val result = resultSet.getInt(1)
+      //println(word)
+      if(result==1) true else false
+
+    } catch {
+      //      case sqlnoelem:
+      case sqle: SQLException =>
+        println("romaji exists failed")
+        println(sqle.getMessage())
+        false
+    }
+    
+  }
+
   def kanaExists(conn: Connection,
     hiragana: String, katakana: String, romaji: String): Boolean = {
     try {
@@ -147,12 +203,13 @@ object DBQueries {
   }
 
   def kanjiExists(conn: Connection, word: String): Boolean = {
+
     try {
       val prepStat: PreparedStatement = conn.prepareStatement(QueryText.kanjiExists)
       prepStat.setString(1, word)
       val resultSet: ResultSet = prepStat.executeQuery()
       val result = resultSet.getInt(1)
-      //println(word)
+
       if(result==1) true else false
 
     } catch {
@@ -200,11 +257,11 @@ object DBQueries {
       prepStat.setString(1, wordIn)
       val resultSet: ResultSet = prepStat.executeQuery()
 
-      var word: String = ""
+//      var word: String = ""
       if(resultSet.next()){
-        //print("got English word  ")
-        val id = resultSet.getInt("ew_wordID")
-        val word = resultSet.getString("ew_word")
+  
+        val id = resultSet.getInt("ks_kanjiID")
+        val word = resultSet.getString("ks_char")
 
         new DBTypes.Kanji(id, word)
 
@@ -213,12 +270,62 @@ object DBQueries {
       }
     } catch {
       case sqle: SQLException =>
-        println("get english word failed")
+        println("get kanji failed")
         println(sqle.getMessage())
         DBTypes.Kanji(0, "NONE")
     }
     
   }
+  def getKana(conn: Connection,
+    hiragana: String, katakana: String, romaji: String): DBTypes.Kana = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(QueryText.getKana)
+      prepStat.setString(1, hiragana)
+      prepStat.setString(2, katakana)
+      prepStat.setString(3, romaji)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      if(resultSet.next()){
+        new DBTypes.Kana(resultSet.getInt("kns_kanaID"),
+          resultSet.getString("kns_katakana"),
+          resultSet.getString("kns_hiragana"),
+          resultSet.getString("kns_romaji")
+        )
+      } else {
+        new DBTypes.Kana(0, "NONE", "NONE", "NONE")
+      }
+    } catch {
+      case sqle: SQLException =>
+        println("get kana failed")
+        println(sqle.getMessage())
+        new DBTypes.Kana(0, "NONE", "NONE", "NONE")
+    }
+
+  }
+
+  def japaneseWordKanaLinkExists(conn: Connection, kanaList: List[DBTypes.Kana]): DBTypes.JapaneseWord = {
+    //val kanaIDs = kanaList.map(_.wordID)
+    val kanaIDs = for(kana <- kanaList) yield kana.wordID
+    val tup = DBTools.idTupleConstructor(kanaIDs)
+    val q = """select jwkn_japaneseWordID, count(*) from japaneseWordKanaLink
+where jwkn_kanaID in """+tup+""" group by jwkn_japaneseWordID having count(*)="""+kanaList.length+""";"""
+    try {
+      println(q)
+      val prepStat: PreparedStatement = conn.prepareStatement(q)
+      val resultSet: ResultSet = prepStat.executeQuery()
+      if(resultSet.next()){
+        val japaneseWordID = resultSet.getInt(1)
+        new DBTypes.JapaneseWord(japaneseWordID)
+      } else {
+        new DBTypes.JapaneseWord(-1)
+      }
+    } catch {
+      case sqle: SQLException =>
+        println("get kana j word link failed")
+        println(sqle.getMessage())
+        new DBTypes.JapaneseWord(-1)
+    }
+  }
+      
 
 
 

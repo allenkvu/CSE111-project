@@ -60,7 +60,8 @@ where ks_char = '山' and ks_kanjiID = kel_kanjiID and kel_englishWordID = ew_wo
 --input will be a japanese word and output would be an english description for that japanese word (doesnt work properly)
 select ew_word
 from englishWord, englishPhrase, japaneseWordDescription
-where jwd_japaneseWordID =  select jwkn_japaneseWordID
+where jwd_japaneseWordID =  (
+select jwkn_japaneseWordID
       from japaneseWordKanaLink
       inner join kanaSystem
       on jwkn_kanaID = kns_kanaID

@@ -75,7 +75,7 @@ class SetupSubpanels (pub: SetupPublishers) {
   val katakanaSetupPanel = new BorderPanel {
 
     layout(new Label {
-      text = "Katakana"
+      text = "Katakana (seperate Kana with space; enter only 1 kana type)"
       font = new Font("ariel", java.awt.Font.PLAIN, 14)
     }) = North
     
@@ -86,7 +86,7 @@ class SetupSubpanels (pub: SetupPublishers) {
   val hiraganaSetupPanel = new BorderPanel {
 
     layout(new Label {
-      text = "Hiragana"
+      text = "Hiragana (seperate Kana with space; enter only 1 kana type)"
       font = new Font("ariel", java.awt.Font.PLAIN, 14)
     }) = North
     
@@ -97,7 +97,7 @@ class SetupSubpanels (pub: SetupPublishers) {
   val romajiSetupPanel = new BorderPanel {
 
     layout(new Label {
-      text = "Romaji"
+      text = "Romaji (seperate Kana with space; enter only 1 kana type)"
       font = new Font("ariel", java.awt.Font.PLAIN, 14)
     }) = North
     

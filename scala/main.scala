@@ -113,9 +113,81 @@ object SimpleGUI extends SimpleSwingApplication {
           mySetupPublishers.clearSetupButton =>
         clearSetup(mySetupPublishers)
         updateCountText(myConn, myCountPanel)
+      /*
+       Kana input only
+       Create Japanese word from Kana if not exists
+       */
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && ( // any Kana character
+              (mySetupPublishers.katakanaSetup.text != "")
+                || (mySetupPublishers.hiraganaSetup.text != "")
+                || (mySetupPublishers.romajiSetup.text != "")
+            )
+            && (mySetupPublishers.kanjiSetup.text == "")
+            && (mySetupPublishers.englishSetup.text == "")
+          ) =>
+        println("Kana Japanese word setup")
+        val kanaClasses = DBTools.parseKana(myConn, 
+          mySetupPublishers.katakanaSetup.text,
+          mySetupPublishers.hiraganaSetup.text,
+          mySetupPublishers.romajiSetup.text
+        )
+        val jWord = DBTools.getJapaneseWordFromKana(myConn, kanaClasses)
+        mySetupPublishers.englishSetup.text = jWord.wordID.toString
+
+        updateCountText(myConn, myCountPanel)
+
 
       // SETUP
-      // setup link between all 5 types
+      /*
+       Kana and English input only
+       Create Japanese word from Kana if not exists
+       Create Japanese English words link
+       */
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && ( // any Kana character
+              (mySetupPublishers.katakanaSetup.text != "")
+                || (mySetupPublishers.hiraganaSetup.text != "")
+                || (mySetupPublishers.romajiSetup.text != "")
+            )
+            && (mySetupPublishers.kanjiSetup.text == "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) =>
+        println("Kana, English link setup")
+        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
+
+
+      /*
+       Kana and Kanji input only
+       Create Japanese word from Kana if not exists
+       Link Kanji sequence to this Japanese word
+       */
+      case ButtonClicked(component)
+          if ((component == mySetupPublishers.setupButton)
+            && ( // any Kana character
+              (mySetupPublishers.katakanaSetup.text != "")
+                || (mySetupPublishers.hiraganaSetup.text != "")
+                || (mySetupPublishers.romajiSetup.text != "")
+            )
+            && (mySetupPublishers.kanjiSetup.text == "")
+            && (mySetupPublishers.englishSetup.text != "")
+          ) =>
+        println("Kana, Kanji link setup")
+        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
+
+      /*
+       English words, Kana, and Kanji input
+       Create Japanese word from Kana sequence if not exists
+       Link Kanji to this Japanese word
+       Link English sequence to this Japanese word
+
+       */
+
+
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
@@ -124,36 +196,28 @@ object SimpleGUI extends SimpleSwingApplication {
             && (mySetupPublishers.kanjiSetup.text != "")
             && (mySetupPublishers.englishSetup.text != "")
           ) =>
+        println("English, Kana, Kanji link setup")
         val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
         updateCountText(myConn, myCountPanel)
 
-      // setup link between English and Kana
+      /*
+       English words input
+       */
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
-            && (
-              (mySetupPublishers.katakanaSetup.text != "")
-                || (mySetupPublishers.hiraganaSetup.text != "")
-                || (mySetupPublishers.romajiSetup.text != "")
-            )
+            && (mySetupPublishers.katakanaSetup.text == "")
+            && (mySetupPublishers.hiraganaSetup.text == "")
+            && (mySetupPublishers.romajiSetup.text == "")
             && (mySetupPublishers.kanjiSetup.text == "")
             && (mySetupPublishers.englishSetup.text != "")
           ) =>
+        printf("English words setup")
         val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
         updateCountText(myConn, myCountPanel)
 
-      // setup insert English
-      case ButtonClicked(component)
-          if ((component == mySetupPublishers.setupButton)
-            && (mySetupPublishers.katakanaSetup.text != "")
-            && (mySetupPublishers.hiraganaSetup.text != "")
-            && (mySetupPublishers.romajiSetup.text != "")
-            && (mySetupPublishers.kanjiSetup.text == "")
-            && (mySetupPublishers.englishSetup.text != "")
-          ) =>
-        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
-        updateCountText(myConn, myCountPanel)
-
-      // setup insert Kanji
+        /*
+         Kanji characters input
+         */
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text == "")
@@ -162,21 +226,9 @@ object SimpleGUI extends SimpleSwingApplication {
             && (mySetupPublishers.kanjiSetup.text != "")
             && (mySetupPublishers.englishSetup.text == "")
           ) =>
-        val wordClasses = DBTools.parseKanji(myConn, mySetupPublishers.englishSetup.text)
+        println("Kanji characters setup")
+        val wordClasses = DBTools.parseKanji(myConn, mySetupPublishers.kanjiSetup.text)
         updateCountText(myConn, myCountPanel)
-
-        /*      // setup insert Kana
-         case ButtonClicked(component)
-         if ((component == mySetupPublishers.setupButton)
-         && (mySetupPublishers.katakanaSetup.text != "")
-         && (mySetupPublishers.hiraganaSetup.text != "")
-         && (mySetupPublishers.romajiSetup.text != "")
-         && (mySetupPublishers.kanjiSetup.text == "")
-         && (mySetupPublishers.englishSetup.text != "")
-         ) =>
-         val wordClasses = DBTools.parseEnglishSetup(myConn, mySetupPublishers.englishSetup.text)
-         updateCountText(myConn, myCountPanel)
-         */
 
 
 

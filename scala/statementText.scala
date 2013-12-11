@@ -3,7 +3,7 @@ package translator
 object StatementText {
   val insertEnglishWord = """insert into englishWord (ew_word) values (?)"""
   val insertJapaneseWord = """insert into japaneseWord values (NULL);"""
-  val insertKanji = """insert into kanjiSystem values (NULL, '?');"""
+  val insertKanji = """insert into kanjiSystem (ks_kanjiID, ks_char) values (NULL, ?);"""
   // not necessary to insert Kana characters
 
 
