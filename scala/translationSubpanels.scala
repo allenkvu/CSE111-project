@@ -41,16 +41,16 @@ class TranslationSubpanels (pub: TranslationPublishers) {
       layout(pub.romajiTranslation) = Center
       layout(pub.romajiTranslateButton) = South
     }
-    // Japanese Kangi panel
-    val kangiTranslationPanel = new BorderPanel {
+    // Japanese Kanji panel
+    val kanjiTranslationPanel = new BorderPanel {
 
       layout(new Label {
-        text = "Kangi"
+        text = "Kanji"
         font = new Font("ariel", java.awt.Font.PLAIN, 14)
       }) = North
       
-      layout(pub.kangiTranslation) = Center
-      layout(pub.kangiTranslateButton) = South
+      layout(pub.kanjiTranslation) = Center
+      layout(pub.kanjiTranslateButton) = South
     }
 
     // English panel

@@ -20,7 +20,20 @@ object DBStatements {
       
     } catch {
       case sqle: SQLException =>
-        println("find English word failed")
+        println("insert English word failed")
+        println(sqle.getMessage())
+        false
+    }
+  }
+  def insertKanji(conn: Connection, word: String) = {
+    try {
+      val prepStat: PreparedStatement = conn.prepareStatement(StatementText.insertKanji)
+      prepStat.setString(1, word)
+      prepStat.executeUpdate()
+      
+    } catch {
+      case sqle: SQLException =>
+        println("insert Kanji failed")
         println(sqle.getMessage())
         false
     }

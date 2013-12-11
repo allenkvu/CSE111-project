@@ -13,7 +13,7 @@ class TranslationPublishers {
   val hiraganaTranslation = new TextField
   val romajiTranslation = new TextField
 
-  val kangiTranslation = new TextField
+  val kanjiTranslation = new TextField
 
   val englishTranslation = new TextField
 
@@ -23,7 +23,7 @@ class TranslationPublishers {
   val hiraganaTranslation = new TextArea
   val romajiTranslation = new TextArea
 
-  val kangiTranslation = new TextArea
+  val kanjiTranslation = new TextArea
 
   val englishTranslation = new TextArea
 
@@ -44,8 +44,8 @@ class TranslationPublishers {
     enabled = true
   }
 
-  val kangiTranslateButton = new Button {
-    text = "Translate Kangi"
+  val kanjiTranslateButton = new Button {
+    text = "Translate Kanji"
     borderPainted = true
     enabled = true
   }

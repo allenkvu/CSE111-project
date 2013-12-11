@@ -5,16 +5,20 @@ object QueryText {
   val getAllEnglish = """select * from englishWord;"""
   val getEnglish = """select * from englishWord where ew_word = ?;"""
   val englishCount = """select count(*) from englishWord;"""
-  val englishHas = """select count(*) from englishWord where ew_word = ?;"""
+  val englishExists = """select count(*) from englishWord where ew_word = ?;"""
 
   val getAllKana = """select * from kanaSystem;"""
   val getHiragana = """select * from kanaSystem where kns_hiragana = '?';"""
   val getKatakana = """select * from kanaSystem where kns_katakana = '?';"""
   val getRomaji = """select * from kanaSystem where kns_romaji = '?';"""
   val kanaCount = """select count(*) from kanaSystem;"""
+  val kanaExists = """select count(*) from kanaSystem
+where kns_hiragana = '?' or kns_katakana = '?' or kns_romaji = '?';"""
 
   val getKanji = """select * from kanjiSystem where ks_char = '?';"""
   val kanjiCount = """select count(*) from kanjiSystem;"""
+  val kanjiExists = """select count(*) from kanjiSystem where ks_char = '?';"""
+
 
   val japaneseCount = """select count(*) from japaneseWord;"""
 

@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 
 
 
-class DBConn {
+class DBInterface {
   val foo = "bar"
 
   val jdbc = Class.forName("org.sqlite.JDBC")
@@ -55,14 +55,14 @@ object DBTypes {
 
   case class JapaneseWord (wordID: Int)
   case class Kana (wordID: Int, katakana: String, hiragana: String, romaji: String)
-  case class Kangi (wordID: Int, kangi: String)
+  case class Kanji (wordID: Int, kangi: String)
   case class EnglishWord (wordID: Int, englishWord: String)
 
 }
 
 object DBTools {
 
-  def parseEnglishSetup(conn: Connection, text: String): List[DBTypes.EnglishWord] = {
+  def parseEnglish(conn: Connection, text: String): List[DBTypes.EnglishWord] = {
     val wordsStrings = text.split(" ")
     for(word <- wordsStrings){
       if(DBQueries.englishWordExists(conn, word) == false){
@@ -74,6 +74,19 @@ object DBTools {
 
 
   }
+  def parseKanji(conn: Connection, text: String): List[DBTypes.Kanji] = {
+    val wordsStrings = text.split("").toList.filter(_!="").filter(_!=" ")
+    for(word <- wordsStrings){
+      if(DBQueries.kanjiExists(conn, word) == false){
+        DBStatements.insertKanji(conn, word)
+      } 
+    } 
+    val arr = for(word <- wordsStrings) yield DBQueries.getKanji(conn, word)
+    arr.toList
+
+
+  }
+
 }
 
 

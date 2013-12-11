@@ -10,9 +10,9 @@ import java.sql.Connection
 
 object SimpleGUI extends SimpleSwingApplication {
 
-  val myConnClass = new DBConn
-  val conn = myConnClass.getConn
-  val stat = myConnClass.getStat
+  val myDBInterface = new DBInterface
+  val myConn = myDBInterface.getConn
+  //  val stat = myDBInterface.getStat
 
   def top = new MainFrame {
     title = "Japanese-English Translator"
@@ -20,7 +20,7 @@ object SimpleGUI extends SimpleSwingApplication {
       contents += new Menu("File") {
         contents += new MenuItem(Action("Exit") {
           //sys.exit(0)
-          conn.close()
+          myConn.close()
           dispose()
         })
       }
@@ -48,7 +48,8 @@ object SimpleGUI extends SimpleSwingApplication {
       contents += mySetupSubpanels.katakanaSetupPanel
       contents += mySetupSubpanels.hiraganaSetupPanel
       contents += mySetupSubpanels.romajiSetupPanel
-      contents += mySetupSubpanels.kangiSetupPanel
+      contents += mySetupSubpanels.kanjiSetupPanel
+
 
       contents += mySetupSubpanels.englishSetupPanel
 
@@ -69,7 +70,7 @@ object SimpleGUI extends SimpleSwingApplication {
       contents += myTranslationSubpanels.katakanaTranslationPanel
       contents += myTranslationSubpanels.hiraganaTranslationPanel
       contents += myTranslationSubpanels.romajiTranslationPanel
-      contents += myTranslationSubpanels.kangiTranslationPanel
+      contents += myTranslationSubpanels.kanjiTranslationPanel
 
       contents += myTranslationSubpanels.englishTranslationPanel
 
@@ -104,37 +105,41 @@ object SimpleGUI extends SimpleSwingApplication {
     // REACTIONS
     reactions += {
       case KeyPressed(_, Key.Escape, _, _) => {
-        conn.close()
+        myConn.close()
         dispose()
       }
       // clear setup
       case ButtonClicked(component) if component ==
           mySetupPublishers.clearSetupButton =>
         clearSetup(mySetupPublishers)
+        updateCountText(myConn, myCountPanel)
 
-        // SETUP
-        // setup link between all 5 types
+      // SETUP
+      // setup link between all 5 types
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
             && (mySetupPublishers.katakanaSetup.text != "")
             && (mySetupPublishers.hiraganaSetup.text != "")
             && (mySetupPublishers.romajiSetup.text != "")
-            && (mySetupPublishers.kangiSetup.text != "")
+            && (mySetupPublishers.kanjiSetup.text != "")
             && (mySetupPublishers.englishSetup.text != "")
-          ) => {
-           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
-          }
+          ) =>
+        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
 
       // setup link between English and Kana
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
-            && (mySetupPublishers.katakanaSetup.text != "")
-            && (mySetupPublishers.hiraganaSetup.text != "")
-            && (mySetupPublishers.romajiSetup.text != "")
+            && (
+              (mySetupPublishers.katakanaSetup.text != "")
+                || (mySetupPublishers.hiraganaSetup.text != "")
+                || (mySetupPublishers.romajiSetup.text != "")
+            )
+            && (mySetupPublishers.kanjiSetup.text == "")
             && (mySetupPublishers.englishSetup.text != "")
-          ) => {
-           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
-          }
+          ) =>
+        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
 
       // setup insert English
       case ButtonClicked(component)
@@ -142,21 +147,36 @@ object SimpleGUI extends SimpleSwingApplication {
             && (mySetupPublishers.katakanaSetup.text != "")
             && (mySetupPublishers.hiraganaSetup.text != "")
             && (mySetupPublishers.romajiSetup.text != "")
+            && (mySetupPublishers.kanjiSetup.text == "")
             && (mySetupPublishers.englishSetup.text != "")
-          ) => {
-           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
-          }
+          ) =>
+        val wordClasses = DBTools.parseEnglish(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
 
-      // setup insert Kana
+      // setup insert Kanji
       case ButtonClicked(component)
           if ((component == mySetupPublishers.setupButton)
-            && (mySetupPublishers.katakanaSetup.text != "")
-            && (mySetupPublishers.hiraganaSetup.text != "")
-            && (mySetupPublishers.romajiSetup.text != "")
-            && (mySetupPublishers.englishSetup.text != "")
-          ) => {
-           val wordClasses = DBTools.parseEnglishSetup(conn, mySetupPublishers.englishSetup.text)
-          }
+            && (mySetupPublishers.katakanaSetup.text == "")
+            && (mySetupPublishers.hiraganaSetup.text == "")
+            && (mySetupPublishers.romajiSetup.text == "")
+            && (mySetupPublishers.kanjiSetup.text != "")
+            && (mySetupPublishers.englishSetup.text == "")
+          ) =>
+        val wordClasses = DBTools.parseKanji(myConn, mySetupPublishers.englishSetup.text)
+        updateCountText(myConn, myCountPanel)
+
+        /*      // setup insert Kana
+         case ButtonClicked(component)
+         if ((component == mySetupPublishers.setupButton)
+         && (mySetupPublishers.katakanaSetup.text != "")
+         && (mySetupPublishers.hiraganaSetup.text != "")
+         && (mySetupPublishers.romajiSetup.text != "")
+         && (mySetupPublishers.kanjiSetup.text == "")
+         && (mySetupPublishers.englishSetup.text != "")
+         ) =>
+         val wordClasses = DBTools.parseEnglishSetup(myConn, mySetupPublishers.englishSetup.text)
+         updateCountText(myConn, myCountPanel)
+         */
 
 
 
@@ -164,30 +184,28 @@ object SimpleGUI extends SimpleSwingApplication {
       case ButtonClicked(component) if component ==
           myTranslationPublishers.clearTranslationButton =>
         clearTranslation(myTranslationPublishers)
+        updateCountText(myConn, myCountPanel)
       // translate katakana button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.katakanaTranslateButton => {
             //println("click")
-/*            myTranslationPublishers.englishTranslation.text = ""
-            val ew = DBQueries.getEnglishWords(conn)
-            myTranslationPublishers.englishTranslation.text =
-              ew.foldLeft("")((a: String,b: DBTypes.EnglishWord) => a+b.englishWord+"\n")*/
+            /*            myTranslationPublishers.englishTranslation.text = ""
+             val ew = DBQueries.getEnglishWords(myConn)
+             myTranslationPublishers.englishTranslation.text =
+             ew.foldLeft("")((a: String,b: DBTypes.EnglishWord) => a+b.englishWord+"\n")*/
 
           }
 
 
-          //"from db: " + DBTools.getEnglish(myConn)
+        //"from db: " + DBTools.getEnglish(myMyConn)
         
 
 
       // translate english button
       case ButtonClicked(component) if component ==
           myTranslationPublishers.englishTranslateButton =>
-        //DBTools.newRegion(conn, 101, myTranslationPublishers.englishTranslation.text)
+        //DBTools.newRegion(myConn, 101, myTranslationPublishers.englishTranslation.text)
         myTranslationPublishers.katakanaTranslation.text = "bar"
-        updateCountText(conn, myCountPanel)
-
-
 
     }
 
@@ -210,14 +228,14 @@ object SimpleGUI extends SimpleSwingApplication {
     mySetupPublishers.katakanaSetup.text = ""
     mySetupPublishers.hiraganaSetup.text = ""
     mySetupPublishers.romajiSetup.text = ""
-    mySetupPublishers.kangiSetup.text = ""
+    mySetupPublishers.kanjiSetup.text = ""
     mySetupPublishers.englishSetup.text = ""
   }
   def clearTranslation(myTranslationPublishers: TranslationPublishers) = {
     myTranslationPublishers.katakanaTranslation.text = ""
     myTranslationPublishers.hiraganaTranslation.text = ""
     myTranslationPublishers.romajiTranslation.text = ""
-    myTranslationPublishers.kangiTranslation.text = ""
+    myTranslationPublishers.kanjiTranslation.text = ""
     myTranslationPublishers.englishTranslation.text = ""
   }
 
