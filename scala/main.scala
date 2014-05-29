@@ -64,14 +64,14 @@ object SimpleGUI extends SimpleSwingApplication {
       /*contents += new TextField ("Japanese") {
         editable = false
       }*/
-      contents += japaneseTranslation
+      contents += new ScrollPane(japaneseTranslation)
 
       // English
       contents += new Label {
         text = "English"
         font = new Font("ariel", java.awt.Font.PLAIN, 10)
       }
-      contents += englishTranslation
+      contents += new ScrollPane(englishTranslation)
 
       contents += exitButton
 
